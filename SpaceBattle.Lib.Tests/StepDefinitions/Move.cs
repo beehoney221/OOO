@@ -48,7 +48,19 @@ public class Move
     public void ДопустимКосмическийКорабльПоложениеВПространствеКоторогоНевозможноОпределить()
     {
         _movable.SetupGet(m => m.Position).Throws<Exception>();
-        // _movable.SetupGet(m => m.Position).Returns(new int[] { 1, 1 });
+    }
+
+    [Given(@"скорость корабля определить невозможно")]
+    public void ДопустимСкоростьКорабляОпределитьНевозможно()
+    {
+        _movable.SetupGet(m => m.Velocity).Throws<Exception>();
+    }
+
+    [Given(@"изменить положение в пространстве космического корабля невозможно")]
+    public void ДопустимИзменитьПоложениеВПространствеКосмическогоКорабляНевозможно()
+    {
+        _movable.SetupGet(m => m.Velocity).Throws<Exception>();
+        
     }
 
     [Then(@"возникает ошибка Exception")]
