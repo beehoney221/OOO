@@ -19,7 +19,7 @@ public class MoveCommandTest
         //post
         //movable // pos == (7, 8)
 
-        movable.VerifySet(m => m.Position = new Vector(new int[] { 0, 0 }), Times.Once);
+        movable.VerifySet(m => m.Position = new Vector(new int[] { 24, 10 }), Times.Once);
         movable.VerifyAll();
     }
 }
