@@ -9,8 +9,8 @@ public class MoveCommandTest
         //pre
 
         var movable = new Mock<IMovable>();
-        movable.SetupGet(m => m.Position).Returns(new int[] { 12, 5 }).Verifiable();
-        movable.SetupGet(m => m.Velocity).Returns(new int[] { -5, 3 }).Verifiable();
+        movable.SetupGet(m => m.Position).Returns(new Vector(new int[] { 12, 5 })).Verifiable();
+        movable.SetupGet(m => m.Velocity).Returns(new Vector(new int[] { 12, 5 })).Verifiable();
         var mc = new MoveCommand(movable.Object);
 
         //act
@@ -19,7 +19,7 @@ public class MoveCommandTest
         //post
         //movable // pos == (7, 8)
 
-        movable.VerifySet(m => m.Position = new int[] { 7, 8 }, Times.Once);
+        movable.VerifySet(m => m.Position = new Vector(new int[] { 0, 0 }), Times.Once);
         movable.VerifyAll();
     }
 }
