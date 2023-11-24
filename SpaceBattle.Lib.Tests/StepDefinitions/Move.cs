@@ -24,10 +24,22 @@ public class Move
         _movable.SetupGet(m => m.Position).Returns(new Vector(new int[] { p0, p1 }));
     }
 
+    [Given(@"космический корабль находится в точке трехмерноного пространства с координатами \((.*), (.*), (.*)\)")]
+    public void ДопустимКосмическийКорабльНаходитсяВТочкеТрехмерноногоПространстваСКоординатами(int p0, int p1, int p2)
+    {
+        _movable.SetupGet(m => m.Position).Returns(new Vector(new int[] { p0, p1,p2 }));
+    }
+
     [Given(@"имеет мгновенную скорость \((.*), (.*)\)")]
     public void ДопустимИмеетМгновеннуюСкорость(int p0, int p1)
     {
         _movable.SetupGet(m => m.Velocity).Returns(new Vector(new int[] { p0, p1 }));
+    }
+
+    [Given(@"объект находится в точке пространства \(\)")]
+    public void ДопустимОбъектНаходитсяВТочкеПространства()
+    {
+        commandExecutionLambda = () => _movable.SetupGet(m => m.Position).Returns(new Vector(new int[] {}));
     }
 
     [When(@"происходит прямолинейное равномерное движение без деформации")]
@@ -68,5 +80,10 @@ public class Move
     {
         Assert.Throws<Exception>(() => commandExecutionLambda());
 
+    }
+    [Then(@"возникает ошибка NullException")]
+    public void ТоВозникаетОшибкаNullException()
+    {
+        Assert.Throws<NullReferenceException>(() => commandExecutionLambda());
     }
 }

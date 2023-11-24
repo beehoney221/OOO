@@ -11,7 +11,7 @@ public class Vector
         }
         else
         {
-            throw new System.ArgumentException();
+            throw new NullReferenceException();
         }
     }
 
@@ -29,25 +29,7 @@ public class Vector
         }
         else
         {
-            throw new System.ArgumentException();
-        }
-    }
-
-    public static Vector operator -(Vector array_1, Vector array_2)
-    {
-        if (array_1._dimension == array_2._dimension)
-        {
-            var array_out = new Vector(new int[array_1._dimension]);
-            for (var i = 0; i < array_1._dimension; i++)
-            {
-                array_out._array[i] = array_1._array[i] - array_2._array[i];
-            }
-
-            return array_out;
-        }
-        else
-        {
-            throw new System.ArgumentException();
+            throw new Exception();
         }
     }
 
@@ -70,7 +52,7 @@ public class Vector
         }
         else
         {
-            throw new System.ArgumentException();
+            throw new Exception();
         }
     }
 
@@ -93,7 +75,7 @@ public class Vector
         }
         else
         {
-            throw new ArgumentException();
+            throw new Exception();
         }
     }
 
