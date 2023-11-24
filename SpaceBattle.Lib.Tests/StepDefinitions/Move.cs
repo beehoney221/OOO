@@ -39,7 +39,7 @@ public class Move
     [Given(@"объект находится в точке пространства \(\)")]
     public void ДопустимОбъектНаходитсяВТочкеПространства()
     {
-        commandExecutionLambda = () => _movable.SetupGet(m => m.Position).Returns(new Vector(new int[] {}));
+        commandExecutionLambda = () =>_movable.SetupGet(m => m.Position).Returns(new Vector(Array.Empty<int>()));
     }
 
     [When(@"происходит прямолинейное равномерное движение без деформации")]
@@ -84,6 +84,6 @@ public class Move
     [Then(@"возникает ошибка NullException")]
     public void ТоВозникаетОшибкаNullException()
     {
-        Assert.Throws<NullReferenceException>(() => commandExecutionLambda());
+        Assert.Throws<Exception>(() => commandExecutionLambda());
     }
 }

@@ -11,7 +11,7 @@ public class Vector
         }
         else
         {
-            throw new NullReferenceException();
+            throw new Exception();
         }
     }
 

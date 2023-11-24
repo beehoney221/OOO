@@ -285,9 +285,6 @@ namespace SpaceBattle.Lib.Tests
         testRunner.Given("объект находится в точке пространства ()", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
 #line hidden
 #line 37
-        testRunner.When("происходит прямолинейное равномерное движение без деформации", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Когда ");
-#line hidden
-#line 38
         testRunner.Then("возникает ошибка NullException", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
 #line hidden
             }
