@@ -6,8 +6,10 @@ namespace SpaceBattle.Lib.Tests;
 [Binding]
 public class Move
 {
+    private Vector _vector1;
     private readonly Mock<IMovable> _movable;
 
+    private Action vectorExecutionLambda = () => { };
     private Action commandExecutionLambda;
 
     public Move()
@@ -86,5 +88,68 @@ public class Move
     {
         Assert.Throws<Exception>(() => commandExecutionLambda());
     }
+    [Given(@"Вектор с координатами \((.*), (.*)\)")]
+    public void ДопустимВекторСКоординатами(int p0, int p1)
+    {
+        _vector1 = new Vector(new int[] { p0, p1 });
+    }
+
+    [Then(@"Он равен c вектором \((.*), (.*)\)")]
+    public void ТоОнРавен(int p0, int p1)
+    {
+        Assert.True(_vector1 == new Vector(new int[] { p0, p1 }));
+    }
     
+    [Then(@"Он не равен хэш-коду вектора \((.*), (.*)\)")]
+    public void ТоОнНуРавенХэш_КодуВектора(int p0, int p1)
+    {
+        Assert.True(_vector1.GetHashCode() != (new Vector(new int[] { p0, p1 }).GetHashCode()));
+    }
+    // [Given(@"космический корабль находится в точке пространства с координатами \((.*), (.*)\) в виде HashCode")]
+    // public void ДопустимКосмическийКорабльНаходитсяВТочкеПространстваСКоординатамиВВидеHashCode(int p0, int p1)
+    // {
+    //     _movable.SetupGet(m => m.Position.GetHashCode()).Returns((new Vector(new int[] { p0, p1})).GetHashCode());
+    // }
+    // [Then(@"Они находятся в одной точке пространства")]
+    // public void ТоОниНаходятсяВОднойТочкеПространства()
+    // {
+    //     _movable.VerifySet(m => m.Position = (new Vector(new int[] { 12, 5 })), Times.Once);
+    // }
+    [Given(@"Вектора с координатами \((.*), (.*)\) и \((.*), (.*), (.*)\)")]
+    public void ДопустимВектораСКоординатамиИ(int p0, int p1, int p2, int p3, int p4)
+    {
+        vectorExecutionLambda = () => {
+            var a = new Vector(new int[] { p0, p1 }); 
+            var b = new Vector(new int[] { p2,p3, p4});
+            var c = a == b;
+        };
+    }
+
+    [Given(@"Вектора с координатами \((.*), (.*)\) и \((.*), (.*), (.*)\) сравниваются")]
+         public void ДопустимВектораСКоординатамиИСравниваются(int p0, int p1, int p2, int p3, int p4)
+         {
+            vectorExecutionLambda = () => {
+            var a = new Vector(new int[] { p0, p1 }); 
+            var b = new Vector(new int[] { p2,p3, p4});
+            var c = a != b;
+        };
+         }
+        
+    [Then(@"Возникает ошибка Exception")]
+    public void ТоВОзникаетОшибкаException()
+    {
+        Assert.Throws<Exception>(() => vectorExecutionLambda());
+    }
+
+    [Then(@"Он не равен  вектору \((.*), (.*)\)")]
+    public void ТоОнНеРавенВектору(int p0, int p1)
+    {
+        Assert.True(_vector1 != new Vector(new int[] { p0, p1 }));
+    }
+
+    [Then(@"Он равен вектору \((.*), (.*)\) с помощью Equals")]
+         public void ТоОнРавенВекторуСПомощьюEquals(int p0, int p1)
+         {
+            Assert.True(!(_vector1.Equals((new int[] { p0, p1 }))));
+         }
 }

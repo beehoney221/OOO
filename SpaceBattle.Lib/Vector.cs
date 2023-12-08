@@ -58,39 +58,41 @@ public class Vector
 
     public static bool operator !=(Vector array_1, Vector array_2)
     {
-        if (array_1._dimension == array_2._dimension)
-        {
-            var comparison_result = true;
-            for (var i = 0; i < array_1._dimension; i++)
-            {
-                if (array_1._array[i] == array_2._array[i])
-                {
-                    comparison_result = false;
-                    break;
+        // if (array_1._dimension == array_2._dimension)
+        // {
+            // var comparison_result = true;
+            // for (var i = 0; i < array_1._dimension; i++)
+            // {
+            //     if (array_1._array[i] == array_2._array[i])
+            //     {
+            //         comparison_result = true;
+            //         break;
 
-                }
-            }
+            //     }
+            // }
+            var comparison_result = array_1 == array_2;
 
-            return comparison_result;
-        }
-        else
-        {
-            throw new Exception();
-        }
+            return !(comparison_result);
+        // }
+        // else
+        // {
+        //     throw new Exception();
+        // }
     }
 
     public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        unchecked 
+        {
+            var hash = 17;
+            hash = hash * 23 + _dimension.GetHashCode();
+            hash = hash * 23 + _array.GetHashCode();
+            return hash;
+        }
     }
 
     public override bool Equals(object? obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        
+    { 
         return obj is Vector vector && this == vector;
     }
 }

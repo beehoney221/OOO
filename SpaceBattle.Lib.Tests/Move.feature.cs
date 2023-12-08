@@ -291,6 +291,174 @@ namespace SpaceBattle.Lib.Tests
             this.ScenarioCleanup();
         }
         
+        [Xunit.SkippableFactAttribute(DisplayName="Сравнение двух векторов")]
+        [Xunit.TraitAttribute("FeatureTitle", "Движение")]
+        [Xunit.TraitAttribute("Description", "Сравнение двух векторов")]
+        public void СравнениеДвухВекторов()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Сравнение двух векторов", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 39
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 40
+        testRunner.Given("Вектор с координатами (12, 5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
+#line hidden
+#line 41
+        testRunner.Then("Он равен c вектором (12, 5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Сравнение двух векторов по HashCode")]
+        [Xunit.TraitAttribute("FeatureTitle", "Движение")]
+        [Xunit.TraitAttribute("Description", "Сравнение двух векторов по HashCode")]
+        public void СравнениеДвухВекторовПоHashCode()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Сравнение двух векторов по HashCode", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 43
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 44
+        testRunner.Given("Вектор с координатами (12, 5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
+#line hidden
+#line 45
+        testRunner.Then("Он не равен хэш-коду вектора (12, 5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Сравнение двух векторов разной размернности")]
+        [Xunit.TraitAttribute("FeatureTitle", "Движение")]
+        [Xunit.TraitAttribute("Description", "Сравнение двух векторов разной размернности")]
+        public void СравнениеДвухВекторовРазнойРазмернности()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Сравнение двух векторов разной размернности", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 47
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 48
+        testRunner.Given("Вектора с координатами (12, 5) и (12, 5, 12)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
+#line hidden
+#line 49
+        testRunner.Then("Возникает ошибка Exception", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Не сравнение двух векторов разной размернности")]
+        [Xunit.TraitAttribute("FeatureTitle", "Движение")]
+        [Xunit.TraitAttribute("Description", "Не сравнение двух векторов разной размернности")]
+        public void НеСравнениеДвухВекторовРазнойРазмернности()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Не сравнение двух векторов разной размернности", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 51
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 52
+        testRunner.Given("Вектора с координатами (12, 5) и (12, 5, 12) сравниваются", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
+#line hidden
+#line 53
+        testRunner.Then("Возникает ошибка Exception", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Не сравнение двух векторов")]
+        [Xunit.TraitAttribute("FeatureTitle", "Движение")]
+        [Xunit.TraitAttribute("Description", "Не сравнение двух векторов")]
+        public void НеСравнениеДвухВекторов()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Не сравнение двух векторов", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 55
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 56
+        testRunner.Given("Вектор с координатами (12, 5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
+#line hidden
+#line 57
+        testRunner.Then("Он не равен  вектору (12, -5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Сравнение двух векторов с Equals")]
+        [Xunit.TraitAttribute("FeatureTitle", "Движение")]
+        [Xunit.TraitAttribute("Description", "Сравнение двух векторов с Equals")]
+        public void СравнениеДвухВекторовСEquals()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Сравнение двух векторов с Equals", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 59
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 60
+        testRunner.Given("Вектор с координатами (12, 5)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
+#line hidden
+#line 61
+        testRunner.Then("Он равен вектору (12, 5) с помощью Equals", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Тогда ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
         [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
         [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
         public class FixtureData : System.IDisposable
