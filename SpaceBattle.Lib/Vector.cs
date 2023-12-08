@@ -1,4 +1,4 @@
-public class Vector
+﻿public class Vector
 {
     private int[] _array { get; set; }
     private int _dimension { get; }
@@ -60,19 +60,19 @@ public class Vector
     {
         // if (array_1._dimension == array_2._dimension)
         // {
-            // var comparison_result = true;
-            // for (var i = 0; i < array_1._dimension; i++)
-            // {
-            //     if (array_1._array[i] == array_2._array[i])
-            //     {
-            //         comparison_result = true;
-            //         break;
+        // var comparison_result = true;
+        // for (var i = 0; i < array_1._dimension; i++)
+        // {
+        //     if (array_1._array[i] == array_2._array[i])
+        //     {
+        //         comparison_result = true;
+        //         break;
 
-            //     }
-            // }
-            var comparison_result = array_1 == array_2;
+        //     }
+        // }
+        var comparison_result = array_1 == array_2;
 
-            return !(comparison_result);
+        return !(comparison_result);
         // }
         // else
         // {
@@ -82,7 +82,7 @@ public class Vector
 
     public override int GetHashCode()
     {
-        unchecked 
+        unchecked
         {
             var hash = 17;
             hash = hash * 23 + _dimension.GetHashCode();
@@ -92,7 +92,7 @@ public class Vector
     }
 
     public override bool Equals(object? obj)
-    { 
+    {
         return obj is Vector vector && this == vector;
     }
 }

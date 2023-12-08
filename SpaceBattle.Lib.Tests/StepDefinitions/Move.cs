@@ -29,7 +29,7 @@ public class Move
     [Given(@"космический корабль находится в точке трехмерноного пространства с координатами \((.*), (.*), (.*)\)")]
     public void ДопустимКосмическийКорабльНаходитсяВТочкеТрехмерноногоПространстваСКоординатами(int p0, int p1, int p2)
     {
-        _movable.SetupGet(m => m.Position).Returns(new Vector(new int[] { p0, p1,p2 }));
+        _movable.SetupGet(m => m.Position).Returns(new Vector(new int[] { p0, p1, p2 }));
     }
 
     [Given(@"имеет мгновенную скорость \((.*), (.*)\)")]
@@ -41,7 +41,7 @@ public class Move
     [Given(@"объект находится в точке пространства \(\)")]
     public void ДопустимОбъектНаходитсяВТочкеПространства()
     {
-        commandExecutionLambda = () =>_movable.SetupGet(m => m.Position).Returns(new Vector(Array.Empty<int>()));
+        commandExecutionLambda = () => _movable.SetupGet(m => m.Position).Returns(new Vector(Array.Empty<int>()));
     }
 
     [When(@"происходит прямолинейное равномерное движение без деформации")]
@@ -74,7 +74,7 @@ public class Move
     public void ДопустимИзменитьПоложениеВПространствеКосмическогоКорабляНевозможно()
     {
         _movable.SetupGet(m => m.Velocity).Throws<Exception>();
-        
+
     }
 
     [Then(@"возникает ошибка Exception")]
@@ -99,7 +99,7 @@ public class Move
     {
         Assert.True(_vector1 == new Vector(new int[] { p0, p1 }));
     }
-    
+
     [Then(@"Он не равен хэш-коду вектора \((.*), (.*)\)")]
     public void ТоОнНуРавенХэш_КодуВектора(int p0, int p1)
     {
@@ -118,23 +118,25 @@ public class Move
     [Given(@"Вектора с координатами \((.*), (.*)\) и \((.*), (.*), (.*)\)")]
     public void ДопустимВектораСКоординатамиИ(int p0, int p1, int p2, int p3, int p4)
     {
-        vectorExecutionLambda = () => {
-            var a = new Vector(new int[] { p0, p1 }); 
-            var b = new Vector(new int[] { p2,p3, p4});
+        vectorExecutionLambda = () =>
+        {
+            var a = new Vector(new int[] { p0, p1 });
+            var b = new Vector(new int[] { p2, p3, p4 });
             var c = a == b;
         };
     }
 
     [Given(@"Вектора с координатами \((.*), (.*)\) и \((.*), (.*), (.*)\) сравниваются")]
-         public void ДопустимВектораСКоординатамиИСравниваются(int p0, int p1, int p2, int p3, int p4)
-         {
-            vectorExecutionLambda = () => {
-            var a = new Vector(new int[] { p0, p1 }); 
-            var b = new Vector(new int[] { p2,p3, p4});
+    public void ДопустимВектораСКоординатамиИСравниваются(int p0, int p1, int p2, int p3, int p4)
+    {
+        vectorExecutionLambda = () =>
+        {
+            var a = new Vector(new int[] { p0, p1 });
+            var b = new Vector(new int[] { p2, p3, p4 });
             var c = a != b;
         };
-         }
-        
+    }
+
     [Then(@"Возникает ошибка Exception")]
     public void ТоВОзникаетОшибкаException()
     {
@@ -148,8 +150,8 @@ public class Move
     }
 
     [Then(@"Он равен вектору \((.*), (.*)\) с помощью Equals")]
-         public void ТоОнРавенВекторуСПомощьюEquals(int p0, int p1)
-         {
-            Assert.True(!(_vector1.Equals((new int[] { p0, p1 }))));
-         }
+    public void ТоОнРавенВекторуСПомощьюEquals(int p0, int p1)
+    {
+        Assert.True(!(_vector1.Equals((new int[] { p0, p1 }))));
+    }
 }
