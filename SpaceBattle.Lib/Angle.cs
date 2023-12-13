@@ -2,7 +2,7 @@ namespace SpaceBattle.Lib;
 
 public class Angle 
 {
-    private int tilt { get; set; }
+    public int tilt { get; set; }
     private int var { get; } = 360;
 
     public Angle(int r)
