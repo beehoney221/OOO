@@ -1,6 +1,8 @@
 name: RotateTests
 
 on:
+  push:
+    branches: ["rotate"]    
   pull_request:
     branches: ['master']
 
