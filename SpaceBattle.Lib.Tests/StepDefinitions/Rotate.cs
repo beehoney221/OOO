@@ -1,4 +1,4 @@
-using Moq;
+﻿using Moq;
 using TechTalk.SpecFlow;
 
 namespace SpaceBattle.Lib.Tests
@@ -17,19 +17,19 @@ namespace SpaceBattle.Lib.Tests
             commandExecutionLambda = () => { };
 
         }
-        
+
         [Given(@"космический корабль имеет угол наклона (.*) град к оси OX")]
         public void ДопустимКосмическийКорабльИмеетУголНаклонаГрадКОсиOX(int p0)
         {
             _rotatable.SetupGet(m => m.Angle).Returns(new Angle(p0));
         }
-        
+
         [Given(@"космический корабль, угол наклона которого невозможно определить")]
         public void ДопустимКосмическийКорабльУголНаклонаКоторогоНевозможноОпределить()
         {
             _rotatable.SetupGet(m => m.Angle).Throws<Exception>();
         }
-        
+
         [Given(@"мгновенную угловую скорость невозможно определить")]
         public void ДопустимМгновеннуюУгловуюСкоростьНевозможноОпределить()
         {
@@ -47,14 +47,14 @@ namespace SpaceBattle.Lib.Tests
         {
             _rotatable.SetupGet(m => m.AngleVelocity).Returns(new Angle(p0));
         }
-        
+
         [When(@"происходит вращение вокруг собственной оси")]
         public void КогдаПроисходитВращениеВокругСобственнойОси()
         {
             var rc = new RotateCommand(_rotatable.Object);
             commandExecutionLambda = () => rc.Execute();
         }
-        
+
         [Then(@"угол наклона космического корабля к оси OX составляет (.*) град")]
         public void ТоУголНаклонаКосмическогоКорабляКОсиOXСоставляетГрад(int p0)
         {

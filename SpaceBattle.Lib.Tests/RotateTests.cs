@@ -1,4 +1,4 @@
-using Moq;
+﻿using Moq;
 namespace SpaceBattle.Lib.Tests;
 
 public class RotateTest
