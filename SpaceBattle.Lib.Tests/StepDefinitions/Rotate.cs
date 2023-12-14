@@ -6,14 +6,11 @@ namespace SpaceBattle.Lib.Tests
     [Binding]
     public class Rotate
     {
-        private readonly ScenarioContext _scenarioContext;
         private readonly Mock<IRotatable> _rotatable;
 
         private Action commandExecutionLambda;
-        public Rotate(ScenarioContext scenarioContext)
+        public Rotate()
         {
-
-            _scenarioContext = scenarioContext;
 
             _rotatable = new Mock<IRotatable>();
 
