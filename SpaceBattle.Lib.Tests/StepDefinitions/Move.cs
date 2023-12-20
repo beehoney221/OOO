@@ -6,7 +6,7 @@ namespace SpaceBattle.Lib.Tests;
 [Binding]
 public class Move
 {
-    private Vector _vector1 = new Vector(new int[] { 1,2});
+    private Vector _vector1 = new Vector(new int[] { 1, 2 });
     private readonly Mock<IMovable> _movable;
 
     private Action vectorExecutionLambda = () => { };
@@ -105,7 +105,7 @@ public class Move
     {
         Assert.True(_vector1.GetHashCode() != (new Vector(new int[] { p0, p1 }).GetHashCode()));
     }
-    
+
     [Given(@"Вектора с координатами \((.*), (.*)\) и \((.*), (.*), (.*)\)")]
     public void ДопустимВектораСКоординатамиИ(int p0, int p1, int p2, int p3, int p4)
     {
