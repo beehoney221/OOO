@@ -6,7 +6,7 @@ namespace SpaceBattle.Lib.Tests;
 [Binding]
 public class Move
 {
-    private Vector _vector1;
+    private Vector _vector1 = new Vector(new int[] { 1,2});
     private readonly Mock<IMovable> _movable;
 
     private Action vectorExecutionLambda = () => { };
@@ -105,16 +105,7 @@ public class Move
     {
         Assert.True(_vector1.GetHashCode() != (new Vector(new int[] { p0, p1 }).GetHashCode()));
     }
-    // [Given(@"космический корабль находится в точке пространства с координатами \((.*), (.*)\) в виде HashCode")]
-    // public void ДопустимКосмическийКорабльНаходитсяВТочкеПространстваСКоординатамиВВидеHashCode(int p0, int p1)
-    // {
-    //     _movable.SetupGet(m => m.Position.GetHashCode()).Returns((new Vector(new int[] { p0, p1})).GetHashCode());
-    // }
-    // [Then(@"Они находятся в одной точке пространства")]
-    // public void ТоОниНаходятсяВОднойТочкеПространства()
-    // {
-    //     _movable.VerifySet(m => m.Position = (new Vector(new int[] { 12, 5 })), Times.Once);
-    // }
+    
     [Given(@"Вектора с координатами \((.*), (.*)\) и \((.*), (.*), (.*)\)")]
     public void ДопустимВектораСКоординатамиИ(int p0, int p1, int p2, int p3, int p4)
     {
