@@ -1,8 +1,8 @@
-name: RotateTests
+name: tests
 
 on:
   push:
-    branches: ["rotate"]    
+      
   pull_request:
     branches: ['master']
 
