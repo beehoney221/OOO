@@ -2,6 +2,7 @@ name: Main CI-pipeline
 
 on:
   push:
+  pull_request:
 
 jobs:
   build:
@@ -26,4 +27,4 @@ jobs:
 
       - name: Checkstyle
         run: dotnet format --verify-no-changes
-        
+           

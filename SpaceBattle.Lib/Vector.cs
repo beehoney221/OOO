@@ -17,50 +17,30 @@
 
     public static Vector operator +(Vector array_1, Vector array_2)
     {
-        if (array_1._dimension == array_2._dimension)
-        {
-            var array_out = new Vector(new int[array_1._dimension]);
-            for (var i = 0; i < array_1._dimension; i++)
-            {
-                array_out._array[i] = array_1._array[i] + array_2._array[i];
-            }
-
-            return array_out;
-        }
-        else
+        if (array_1._dimension != array_2._dimension)
         {
             throw new Exception();
         }
+
+        return new Vector(array_1._array.Zip(array_2._array, (array_1, array_2) => array_1 + array_2).ToArray());
     }
 
     public static bool operator ==(Vector array_1, Vector array_2)
     {
-        if (array_1._dimension == array_2._dimension)
-        {
-            var comparison_result = true;
-            for (var i = 0; i < array_1._dimension; i++)
-            {
-                if (array_1._array[i] != array_2._array[i])
-                {
-                    comparison_result = false;
-                    break;
-
-                }
-            }
-
-            return comparison_result;
-        }
-        else
+        
+        if (array_1._dimension != array_2._dimension)
         {
             throw new Exception();
         }
+
+        return !(array_1._array.Equals(array_2._array));
     }
 
     public static bool operator !=(Vector array_1, Vector array_2)
     {
         var comparison_result = array_1 == array_2;
 
-        return !(comparison_result);
+        return (comparison_result);
     }
 
     public override int GetHashCode()
