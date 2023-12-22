@@ -27,7 +27,7 @@
 
     public static bool operator ==(Vector array_1, Vector array_2)
     {
-        
+
         if (array_1._dimension != array_2._dimension)
         {
             throw new Exception();
