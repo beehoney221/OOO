@@ -27,4 +27,4 @@ jobs:
 
       - name: Checkstyle
         run: dotnet format --verify-no-changes
-           
+          
