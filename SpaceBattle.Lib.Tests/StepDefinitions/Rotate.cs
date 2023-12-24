@@ -62,8 +62,8 @@ namespace SpaceBattle.Lib.Tests
             _rotatable.VerifySet(m => m.Angle = It.Is<Angle>(e => e.tilt == p0));
         }
 
-        [Then(@"Возникает ошибка Exception")]
-        public void ТоВозникаетОшибкаException()
+        [Then(@"ВОЗНИКАЕТ ошибка Exception")]
+        public void ТоВОЗНИКАЕТОшибкаException()
         {
             Assert.Throws<Exception>(() => commandExecutionLambda());
         }
