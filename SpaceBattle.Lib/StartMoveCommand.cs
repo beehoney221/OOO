@@ -13,12 +13,14 @@ public class StartMoveCommand: ICommand
 
     public void Execute()
     {
-        _mcs.queue.ToList().ForEach(property => IoC.Resolve<object>(
+        _mcs.Properties.ToList().ForEach(property => IoC.Resolve<object>(
             "Game.IUObject.SetProperty",
             _mcs.uobject,
             property.Key,
             property.Value
         ));
+
+        
         //var cmd = IoC.Resolve<ICommand>()
     }
 }
