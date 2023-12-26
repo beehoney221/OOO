@@ -1,5 +1,5 @@
-namespace SpaceBattle.Lib;
-public class BridgeCommand: ICommand, IBridgeCommand
+﻿namespace SpaceBattle.Lib;
+public class BridgeCommand : ICommand, IBridgeCommand
 {
     private ICommand _cmd;
     public BridgeCommand(ICommand cmd)
