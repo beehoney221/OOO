@@ -2,25 +2,30 @@ using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
-public class StartMoveCommand: ICommand
+public class StarMovetCommand: ICommand
 {
-    private readonly ICommandStartable _mcs;
+    private readonly ICommandStartable _smc;
 
-    public StartMoveCommand(ICommandStartable mcs)
+    public StarMovetCommand(ICommandStartable smc)
     {
-        _mcs = mcs;
+        _smc = smc;
     }
 
     public void Execute()
     {
-        _mcs.Properties.ToList().ForEach(property => IoC.Resolve<object>(
+        _smc.Properties.ToList().ForEach(property => IoC.Resolve<object>(
             "Game.IUObject.SetProperty",
-            _mcs.uobject,
+            _smc.Target,
             property.Key,
             property.Value
         ));
 
-        
-        //var cmd = IoC.Resolve<ICommand>()
+        var startCmd  = IoC.Resolve<ICommand>("Game.Commands.LongMove", _smc.Target);
+
+        var injectCmd = IoC.Resolve<ICommand>("Game.Commands.Inject", startCmd);
+
+        IoC.Resolve<ICommand>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.Inject.LongMove", injectCmd);
+
+        IoC.Resolve<IQueue>("Game.Queue").Add((ICommand)injectCmd);
     }
 }
