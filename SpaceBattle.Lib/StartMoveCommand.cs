@@ -2,11 +2,11 @@ using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
-public class StarMovetCommand: ICommand
+public class StartMoveCommand: ICommand
 {
     private readonly ICommandStartable _smc;
 
-    public StarMovetCommand(ICommandStartable smc)
+    public StartMoveCommand(ICommandStartable smc)
     {
         _smc = smc;
     }
@@ -22,10 +22,10 @@ public class StarMovetCommand: ICommand
 
         var startCmd  = IoC.Resolve<ICommand>("Game.Commands.StartMove", _smc.Target);
 
-        var injectCmd = IoC.Resolve<ICommand>("Game.Commands.Inject", startCmd);
+        //var injectCmd = IoC.Resolve<ICommand>("Game.Commands.Inject", startCmd);
 
-        IoC.Resolve<ICommand>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.Inject.StartMove", injectCmd);
+        IoC.Resolve<ICommand>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.StartMove", startCmd);
 
-        IoC.Resolve<IQueue>("Game.Queue").Add((ICommand)injectCmd);
+        IoC.Resolve<IQueue>("Game.Queue").Add((ICommand)startCmd);
     }
 }
