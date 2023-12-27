@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
 
@@ -37,16 +37,16 @@ public class BuildSolTreeTest
         var decisionTree = IoC.Resolve<Dictionary<int, object>>("BuildTree");
 
         Assert.NotNull(decisionTree);
-        Assert.True(decisionTree.ContainsKey(1));
+        Assert.True(decisionTree.ContainsKey(5));
 
-        var tree = (IDictionary<int, object>)decisionTree[1];
-        Assert.True(tree.ContainsKey(2));
+        var tree = (IDictionary<int, object>)decisionTree[5];
+        Assert.True(tree.ContainsKey(7));
 
-        var tree2 = (Dictionary<int, object>)tree[2];
-        Assert.True(tree2.ContainsKey(3));
+        var tree2 = (Dictionary<int, object>)tree[7];
+        Assert.True(tree2.ContainsKey(8));
 
-        var tree3 = (Dictionary<int, object>)tree2[3];
-        Assert.True(tree3.ContainsKey(4));
+        var tree3 = (Dictionary<int, object>)tree2[8];
+        Assert.True(tree3.ContainsKey(1));
     }
 
     [Fact]
