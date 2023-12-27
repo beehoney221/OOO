@@ -20,11 +20,11 @@ public class StarMovetCommand: ICommand
             property.Value
         ));
 
-        var startCmd  = IoC.Resolve<ICommand>("Game.Commands.LongMove", _smc.Target);
+        var startCmd  = IoC.Resolve<ICommand>("Game.Commands.StartMove", _smc.Target);
 
         var injectCmd = IoC.Resolve<ICommand>("Game.Commands.Inject", startCmd);
 
-        IoC.Resolve<ICommand>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.Inject.LongMove", injectCmd);
+        IoC.Resolve<ICommand>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.Inject.StartMove", injectCmd);
 
         IoC.Resolve<IQueue>("Game.Queue").Add((ICommand)injectCmd);
     }
