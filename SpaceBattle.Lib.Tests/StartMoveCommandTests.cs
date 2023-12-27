@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
 
@@ -10,7 +10,7 @@ public class StartMoveCommandTests
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>(
-            "Scopes.Current.Set", 
+            "Scopes.Current.Set",
             IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))
         ).Execute();
 
@@ -39,12 +39,20 @@ public class StartMoveCommandTests
             }
         ).Execute();
 
+        // var moqInject = new Mock<IBridgeCommand>();
+        // moqInject.Setup(mc => mc.Inject(It.IsAny<Lib.ICommand>()));
+
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Game.Commands.Bridge",
             (object[] args) =>
             {
                 return new BridgeCommand((ICommand)args[0]);
+                // var locInject = (IBridgeCommand)args[0];
+                // var cmdInject = (ICommand)args[1];
+                // locInject.Inject(cmdInject);
+
+                // return locInject;
             }
         ).Execute();
 
@@ -75,19 +83,38 @@ public class StartMoveCommandTests
         var target = new Mock<IUObject>();
         var targets = new Dictionary<string, object>();
         var properties = new Dictionary<string, object> {
-            {"id", 1},
+            {"Velocity", new Vector(new int[] { 12, 5 })},
         };
 
-        moveStartable.SetupGet(s=> s.Properties).Returns(properties);
-        moveStartable.SetupGet(s=> s.Target).Returns(target.Object);
+        moveStartable.SetupGet(s => s.Properties).Returns(properties);
+        moveStartable.SetupGet(s => s.Target).Returns(target.Object);
         target.Setup(o => o.SetProperty(It.IsAny<string>(), It.IsAny<object>())).Callback<string, object>(targets.Add);
         qMock.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(qReal.Enqueue);
 
         var startMoveCommand = new StartMoveCommand(moveStartable.Object);
         startMoveCommand.Execute();
 
-        Assert.Contains("id", targets.Keys);
+        Assert.Contains("Velocity", targets.Keys);
         Assert.Contains("Game.Commands.Bridge.StartMove", targets.Keys);
         Assert.NotEmpty(qReal);
+    }
+
+    [Fact]
+    public void BridgeTest()
+    {
+        var moqCmd_1 = new Mock<ICommand>();
+        moqCmd_1.Setup(x => x.Execute()).Verifiable();
+
+        var moqCmd_2 = new Mock<ICommand>();
+        moqCmd_2.Setup(x => x.Execute()).Verifiable();
+
+        var bridgeCmd = new BridgeCommand(moqCmd_1.Object);
+        bridgeCmd.Execute();
+
+        moqCmd_2.Verify(m => m.Execute(), Times.Never());
+        bridgeCmd.Inject(moqCmd_2.Object);
+        bridgeCmd.Execute();
+
+        moqCmd_2.Verify(m => m.Execute(), Times.Once());
     }
 }

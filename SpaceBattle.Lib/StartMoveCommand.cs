@@ -1,8 +1,8 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
-public class StartMoveCommand: ICommand
+public class StartMoveCommand : ICommand
 {
     private readonly ICommandStartable _smc;
 
@@ -20,7 +20,7 @@ public class StartMoveCommand: ICommand
             property.Value
         ));
 
-        var startCmd  = IoC.Resolve<ICommand>("Game.Commands.StartMove", _smc.Target);
+        var startCmd = IoC.Resolve<ICommand>("Game.Commands.StartMove", _smc.Target);
 
         var injectCmd = IoC.Resolve<IBridgeCommand>("Game.Commands.Bridge", startCmd);
 

@@ -1,7 +1,7 @@
-namespace SpaceBattle.Lib;
+﻿namespace SpaceBattle.Lib;
 
 public interface ICommandStartable
 {
-    IUObject Target {get;}
-    IDictionary<string, object> Properties {get;}
+    IUObject Target { get; }
+    IDictionary<string, object> Properties { get; }
 }
