@@ -3,19 +3,6 @@ using Hwdtech.Ioc;
 using Moq;
 
 namespace SpaceBattle.Lib.Tests;
-public class ActionCommand : Lib.ICommand
-{
-    private readonly Action _action;
-    public ActionCommand(Action action)
-    {
-        _action = action;
-    }
-
-    public void Execute()
-    {
-        _action();
-    }
-}
 
 public class StartMoveCommandTests
 {
@@ -29,7 +16,7 @@ public class StartMoveCommandTests
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "Gsme.IUObject.SetProperty",
+            "Game.IUObject.SetProperty",
             (object[] args) =>
             {
                 var target = (IUObject)args[0];
@@ -52,14 +39,14 @@ public class StartMoveCommandTests
             }
         ).Execute();
 
-        // IoC.Resolve<Hwdtech.ICommand>(
-        //     "IoC.Register",
-        //     "Game.Commands.StartMove",
-        //     (object[] args) =>
-        //     {
-        //         return args[0];
-        //     }
-        // ).Execute();
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Game.Commands.Bridge",
+            (object[] args) =>
+            {
+                return new BridgeCommand((ICommand)args[0]);
+            }
+        ).Execute();
 
     }
 
@@ -67,12 +54,13 @@ public class StartMoveCommandTests
 
     public void StartMoveCommand_Succefully()
     {
-        var qReal = new Queue<Lib.ICommand>();
         var qMock = new Mock<IQueue>();
+        var qReal = new Queue<ICommand>();
 
-        qMock.Setup(q => q.Take()).Returns(()=> qReal.Dequeue());
-        qMock.Setup(q => q.Add(It.IsAny<Lib.ICommand>())).Callback(
-            (Lib.ICommand cmd) => qReal.Enqueue(cmd));
+        qMock.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(qReal.Enqueue);
+        // qMock.Setup(q => q.Take()).Returns(()=> qReal.Dequeue());
+        // qMock.Setup(q => q.Add(It.IsAny<Lib.ICommand>())).Callback(
+        //     (Lib.ICommand cmd) => qReal.Enqueue(cmd));
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
@@ -85,10 +73,10 @@ public class StartMoveCommandTests
 
         var moveStartable = new Mock<ICommandStartable>();
         var target = new Mock<IUObject>();
+        var targets = new Dictionary<string, object>();
         var properties = new Dictionary<string, object> {
             {"id", 1},
         };
-        var targets = new Dictionary<string, object>();
 
         moveStartable.SetupGet(s=> s.Properties).Returns(properties);
         moveStartable.SetupGet(s=> s.Target).Returns(target.Object);
@@ -99,7 +87,90 @@ public class StartMoveCommandTests
         startMoveCommand.Execute();
 
         Assert.Contains("id", targets.Keys);
-        Assert.Contains("Game.Commands.StartMove", targets.Keys);
+        Assert.Contains("Game.Commands.Bridge.StartMove", targets.Keys);
         Assert.NotEmpty(qReal);
     }
 }
+
+// ﻿using Hwdtech;
+// using Hwdtech.Ioc;
+// using Moq;
+
+// namespace SpaceBattle.Lib.Tests;
+
+// public class StartMoveCommand_Tests
+// {
+//     public StartMoveCommand_Tests()
+//     {
+//         new InitScopeBasedIoCImplementationCommand().Execute();
+//         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+
+//         IoC.Resolve<Hwdtech.ICommand>(
+//             "IoC.Register",
+//             "Game.IUObject.SetProperty",
+//             (object[] args) =>
+//             {
+//                 var order = (IUObject)args[0];
+//                 var key = (string)args[1];
+//                 var value = args[2];
+
+//                 order.SetProperty(key, value);
+//                 return new object();
+//             }
+//         ).Execute();
+
+//         var longMoveCommand = new Mock<ICommand>().Object;
+//         IoC.Resolve<Hwdtech.ICommand>(
+//             "IoC.Register",
+//             "Game.Commands.StartMove",
+//             (object[] args) =>
+//             {
+//                 return longMoveCommand;
+//             }
+//         ).Execute();
+
+//         IoC.Resolve<Hwdtech.ICommand>(
+//             "IoC.Register",
+//             "Game.Commands.Bridge",
+//             (object[] args) =>
+//             {
+//                 return new BridgeCommand((ICommand)args[0]);
+//             }
+//         ).Execute();
+//     }
+
+//     [Fact]
+//     public void StartMoveCommand_Positive()
+//     {
+//         var queue = new Mock<IQueue>();
+//         var realQueue = new Queue<ICommand>();
+//         queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
+//         IoC.Resolve<Hwdtech.ICommand>(
+//             "IoC.Register",
+//             "Game.Queue",
+//             (object[] args) =>
+//             {
+//                 return queue.Object;
+//             }
+//         ).Execute();
+
+//         var startable = new Mock<ICommandStartable>();
+//         var order = new Mock<IUObject>();
+//         var orderDict = new Dictionary<string, object>();
+//         var properties = new Dictionary<string, object> {
+//             { "id", 1 },
+//         };
+
+//         startable.SetupGet(s => s.Properties).Returns(properties);
+//         startable.SetupGet(s => s.Target).Returns(order.Object);
+//         order.Setup(o => o.SetProperty(It.IsAny<string>(), It.IsAny<object>())).Callback<string, object>(orderDict.Add);
+//         queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
+
+//         var startMoveCommand = new StartMoveCommand(startable.Object);
+//         startMoveCommand.Execute();
+
+//         Assert.Contains("id", orderDict.Keys);
+//         Assert.Contains("Game.Commands.Bridge.StartMove", orderDict.Keys);
+//         Assert.NotEmpty(realQueue);
+//     }
+// }

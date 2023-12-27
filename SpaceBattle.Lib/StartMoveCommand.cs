@@ -22,9 +22,9 @@ public class StartMoveCommand: ICommand
 
         var startCmd  = IoC.Resolve<ICommand>("Game.Commands.StartMove", _smc.Target);
 
-        //var injectCmd = IoC.Resolve<ICommand>("Game.Commands.Inject", startCmd);
+        var injectCmd = IoC.Resolve<IBridgeCommand>("Game.Commands.Bridge", startCmd);
 
-        IoC.Resolve<ICommand>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.StartMove", startCmd);
+        IoC.Resolve<object>("Game.IUObject.SetProperty", _smc.Target, "Game.Commands.Bridge.StartMove", injectCmd);
 
         IoC.Resolve<IQueue>("Game.Queue").Add((ICommand)startCmd);
     }
