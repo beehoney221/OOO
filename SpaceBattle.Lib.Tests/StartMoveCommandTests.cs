@@ -39,20 +39,12 @@ public class StartMoveCommandTests
             }
         ).Execute();
 
-        // var moqInject = new Mock<IBridgeCommand>();
-        // moqInject.Setup(mc => mc.Inject(It.IsAny<Lib.ICommand>()));
-
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Game.Commands.Bridge",
             (object[] args) =>
             {
                 return new BridgeCommand((ICommand)args[0]);
-                // var locInject = (IBridgeCommand)args[0];
-                // var cmdInject = (ICommand)args[1];
-                // locInject.Inject(cmdInject);
-
-                // return locInject;
             }
         ).Execute();
 
@@ -66,9 +58,6 @@ public class StartMoveCommandTests
         var qReal = new Queue<ICommand>();
 
         qMock.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(qReal.Enqueue);
-        // qMock.Setup(q => q.Take()).Returns(()=> qReal.Dequeue());
-        // qMock.Setup(q => q.Add(It.IsAny<Lib.ICommand>())).Callback(
-        //     (Lib.ICommand cmd) => qReal.Enqueue(cmd));
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
