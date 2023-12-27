@@ -1,8 +1,8 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
-public class BuildSolTree: ICommand
+public class BuildSolTree : ICommand
 {
     private readonly IRead _read;
 
@@ -17,7 +17,7 @@ public class BuildSolTree: ICommand
         var solTree = IoC.Resolve<Dictionary<int, object>>("BuildTree");
 
         vector.ForEach(
-            line => 
+            line =>
             {
                 line.ToList().ForEach(coord =>
                 {
