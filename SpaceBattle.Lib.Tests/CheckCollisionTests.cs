@@ -29,7 +29,7 @@ public class CheckCollisionTests
         ).Execute();
 
         var Hashtree = new Hashtable(){
-                {0, new Hashtable(){
+                {1, new Hashtable(){
                     {1, new Hashtable(){
                         {0, new Hashtable(){
                             {-1, new Hashtable()}
@@ -64,10 +64,10 @@ public class CheckCollisionTests
         var obj1 = new Mock<IUObject>();
         var obj2 = new Mock<IUObject>();
 
-        obj1.Setup(o => o.GetProperty("Position")).Returns(new int[] { 0, 0 });
-        obj2.Setup(o => o.GetProperty("Position")).Returns(new int[] { 0, 1 });
-        obj1.Setup(o => o.GetProperty("Velocity")).Returns(new int[] { 0, 0 });
-        obj2.Setup(o => o.GetProperty("Velocity")).Returns(new int[] { 0, -1 });
+        obj1.Setup(o => o.GetProperty("Position")).Returns(new int[] { 1, 1});
+        obj2.Setup(o => o.GetProperty("Position")).Returns(new int[] { 2, 2 });
+        obj1.Setup(o => o.GetProperty("Velocity")).Returns(new int[] { 0, 1 });
+        obj2.Setup(o => o.GetProperty("Velocity")).Returns(new int[] { 0, 2 });
 
         var ccm = new CheckCollisionCommand(obj1.Object, obj2.Object);
 
