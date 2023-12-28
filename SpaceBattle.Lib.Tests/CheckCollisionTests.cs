@@ -1,6 +1,7 @@
 using Hwdtech;
 using Hwdtech.Ioc;
 using System.Collections;
+using Moq;
 
 namespace SpaceBattle.Lib.Tests;
 
@@ -16,7 +17,7 @@ public class CheckCollisionTests
 
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
-        "Game.Object.GetProperty",
+        "Game.IUObject.GetProperty",
         (object[] args) =>
         {
             var obj = (IUObject)args[0];
@@ -46,6 +47,33 @@ public class CheckCollisionTests
         (object[] args) => Hashtree
         ).Execute();
 
+    }
+
+    [Fact]
+    public void CheckCollision_Succefully()
+    {
+        var collisionCommand = new Mock<SpaceBattle.Lib.ICommand>();
+        collisionCommand.Setup(c => c.Execute()).Verifiable("collisionCommand wasn't called");
+
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Game.Collision",
+            (object[] args) => collisionCommand.Object
+        ).Execute();
+
+        var obj1 = new Mock<IUObject>();
+        var obj2 = new Mock<IUObject>();
+
+        obj1.Setup(o => o.GetProperty("Position")).Returns(new int[] { 0, 0 });
+        obj2.Setup(o => o.GetProperty("Position")).Returns(new int[] { 0, 1 });
+        obj1.Setup(o => o.GetProperty("Velocity")).Returns(new int[] { 0, 0 });
+        obj2.Setup(o => o.GetProperty("Velocity")).Returns(new int[] { 0, -1 });
+
+        var ccm = new CheckCollisionCommand(obj1.Object, obj2.Object);
+
+        ccm.Execute();
+
+        collisionCommand.VerifyAll();
     }
 }
 
