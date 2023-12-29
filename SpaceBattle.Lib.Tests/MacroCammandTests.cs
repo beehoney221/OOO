@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
 
@@ -10,7 +10,7 @@ public class MacroCommandTests
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         new MacroCommandBuild().Execute();
-        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", 
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set",
             IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))
         ).Execute();
 
@@ -20,7 +20,7 @@ public class MacroCommandTests
         }).Execute();
     }
 
-     [Fact]
+    [Fact]
     public void MacroCommand_Positive()
     {
         var moveCommand = new Mock<ICommand>();
