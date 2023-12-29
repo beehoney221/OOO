@@ -8,7 +8,7 @@ public class MacroCommandBuild : ICommand
         "IoC.Register",
         "Game.MacroCommand.Build",
         (object[] args) =>
-        {   
+        {
             var dependency = (string)args[0];
             var cmdNames = IoC.Resolve<string[]>(dependency);
 
@@ -16,7 +16,7 @@ public class MacroCommandBuild : ICommand
 
             cmdNames.ToList().ForEach(cmd_name =>
             {
-                cmds.Add(IoC.Resolve<ICommand>(cmd_name)); 
+                cmds.Add(IoC.Resolve<ICommand>(cmd_name));
             });
 
             var macroCommand = new MacroCommand(cmds);
