@@ -9,17 +9,22 @@ public class StopServerCommand : ICommand
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
         "Server.Stop.Cmd",
-        (int numThreads) =>
+        (object[] args) =>
         {
-            var i = 1;
-            Console.Write("Началась процедура остановки.");
-            while (i <= numThreads)
-            {
+            var numThreads = (int)args[0];
+            // var bar = new Barrier(numThreads + 1);
+            var i = 0;
 
-            }
+            var cmd = new ActionCommand(() => {
+                while (i < numThreads)
+                {
+                    IoC.Resolve<ICommand>("ServerThread.SoftStop", i, () => { /* bar.SignalAndWait(); */ }).Execute();
+                    i++;
+                }
+                // bar.SignalAndWait();
+            });
 
-            var barrier = new Barrier(numThreads);
-            return "\nПроцедура остановки завершена!";
+            return cmd;
         }
         ).Execute();
     }

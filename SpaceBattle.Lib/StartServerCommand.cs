@@ -9,19 +9,21 @@ public class StartServerCommand : ICommand
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
         "Server.Start.Cmd",
-        (int numThreads) =>
+        (object[] args) =>
         {
-            var i = 1;
-            var barrier = new Barrier(numThreads);
-            while (i <= numThreads)
-            {
-                var thread = new Thread(() => { });
-                thread.Start();
-                barrier.SignalAndWait();
-            }
+            var numThreads = (int)args[0];
+            var i = 0;
 
-            barrier.SignalAndWait();
-            return "\nУспешный запуск сервера!";
+            var cmd = new ActionCommand(() => {
+                while (i < numThreads)
+                {
+                    IoC.Resolve<ICommand>("ServerThread.CreateAndStart", i, () => { /*bar.SignalAndWait();*/ }).Execute();
+                    i++;
+                }
+                // bar.SignalAndWait();
+            });
+
+            return cmd;
         }
         ).Execute();
     }
