@@ -20,27 +20,27 @@
 //         }).Execute();
 //     }
 
-    // [Fact]
-    // public void MacroCommand_Positive()
-    // {
-    //     var moveCommand = new Mock<ICommand>();
-    //     moveCommand.Setup(mc => mc.Execute()).Callback(() => { }).Verifiable();
-    //     IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Move", (object[] args) =>
-    //     {
-    //         return moveCommand.Object;
-    //     }).Execute();
+// [Fact]
+// public void MacroCommand_Positive()
+// {
+//     var moveCommand = new Mock<ICommand>();
+//     moveCommand.Setup(mc => mc.Execute()).Callback(() => { }).Verifiable();
+//     IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Move", (object[] args) =>
+//     {
+//         return moveCommand.Object;
+//     }).Execute();
 
-    //     var shootCommand = new Mock<ICommand>();
-    //     shootCommand.Setup(cfc => cfc.Execute()).Callback(() => { }).Verifiable();
-    //     IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Shoot", (object[] args) =>
-    //     {
-    //         return shootCommand.Object;
-    //     }).Execute();
+//     var shootCommand = new Mock<ICommand>();
+//     shootCommand.Setup(cfc => cfc.Execute()).Callback(() => { }).Verifiable();
+//     IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Shoot", (object[] args) =>
+//     {
+//         return shootCommand.Object;
+//     }).Execute();
 
-    //     var macroCommand = (MacroCommand)IoC.Resolve<Lib.ICommand>("Game.MacroCommand.Build", "Game.MacroCommands.MoveWithShoot");
-    //     macroCommand.Execute();
+//     var macroCommand = (MacroCommand)IoC.Resolve<Lib.ICommand>("Game.MacroCommand.Build", "Game.MacroCommands.MoveWithShoot");
+//     macroCommand.Execute();
 
-    //     moveCommand.Verify(mc => mc.Execute(), Times.Once());
-    //     shootCommand.Verify(sc => sc.Execute(), Times.Once());
-    // }
+//     moveCommand.Verify(mc => mc.Execute(), Times.Once());
+//     shootCommand.Verify(sc => sc.Execute(), Times.Once());
+// }
 // }

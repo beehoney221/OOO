@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib.Tests;
@@ -21,10 +21,10 @@ public class ServerCommandTest
                 var id = (int)args[0];
                 var action = (Action)args[1];
 
-                var actStart = new ActionCommand(() => {dict.Add(id, new TestServerThread());});
+                var actStart = new ActionCommand(() => { dict.Add(id, new TestServerThread()); });
 
                 _dict = dict;
-                
+
                 return actStart;
             }
         ).Execute();
@@ -37,13 +37,13 @@ public class ServerCommandTest
                 var id = (int)args[0];
                 var action = (Action)args[1];
 
-                var actStop = new ActionCommand(() => {dict[id].Stop();});
+                var actStop = new ActionCommand(() => { dict[id].Stop(); });
                 _actStop = actStop;
 
                 return _actStop;
             }
         ).Execute();
-        
+
         new StartServerCommand().Execute();
         new StopServerCommand().Execute();
     }
@@ -57,7 +57,7 @@ public class ServerCommandTest
 
         Assert.Equal(num, _dict?.Count);
     }
-    
+
     [Fact]
     public void ServerStopSuccesful()
     {
@@ -65,12 +65,12 @@ public class ServerCommandTest
 
         IoC.Resolve<ICommand>("Server.Start.Cmd", num).Execute();
         IoC.Resolve<ICommand>("Server.Stop.Cmd", num).Execute();
-        
+
         Assert.True(_dict?.Values.All(thread => thread.Status() == true));
     }
 }
 
-public class TestServerThread 
+public class TestServerThread
 {
     private bool _stop = false;
     public bool Status()

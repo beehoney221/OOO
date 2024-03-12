@@ -14,7 +14,8 @@ public class StartServerCommand : ICommand
             var numThreads = (int)args[0];
             var i = 0;
 
-            var cmd = new ActionCommand(() => {
+            var cmd = new ActionCommand(() =>
+            {
                 while (i < numThreads)
                 {
                     IoC.Resolve<ICommand>("ServerThread.CreateAndStart", i, () => { /*bar.SignalAndWait();*/ }).Execute();

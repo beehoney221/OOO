@@ -1,5 +1,5 @@
-﻿using Hwdtech.Ioc;
-using Hwdtech;
+﻿using Hwdtech;
+using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib;
 
@@ -20,10 +20,12 @@ public class ConsoleApp
                 var id = (int)args[0];
                 var action = (Action)args[1];
 
-                var act = new ActionCommand(() => {
+                var act = new ActionCommand(() =>
+                {
                     Console.WriteLine(id);
-                    dict.Add(id, new TestServerThread());});
-                
+                    dict.Add(id, new TestServerThread());
+                });
+
                 return act;
             }
         ).Execute();
@@ -36,16 +38,15 @@ public class ConsoleApp
                 var id = (int)args[0];
                 var action = (Action)args[1];
 
-                var act = new ActionCommand(() => {dict[id].Stop();});
-                
+                var act = new ActionCommand(() => { dict[id].Stop(); });
+
                 return act;
             }
         ).Execute();
-        
+
         new StartServerCommand().Execute();
         new StopServerCommand().Execute();
-        
-        
+
         Console.WriteLine("Введите количество потоков: ");
         var num = Convert.ToInt32(Console.ReadLine());
         Console.WriteLine("Процедура запуска сервера началась.");
@@ -58,7 +59,7 @@ public class ConsoleApp
     }
 }
 
-public class TestServerThread 
+public class TestServerThread
 {
     private bool _stop = false;
     public bool Status()

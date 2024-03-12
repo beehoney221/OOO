@@ -15,7 +15,8 @@ public class StopServerCommand : ICommand
             // var bar = new Barrier(numThreads + 1);
             var i = 0;
 
-            var cmd = new ActionCommand(() => {
+            var cmd = new ActionCommand(() =>
+            {
                 while (i < numThreads)
                 {
                     IoC.Resolve<ICommand>("ServerThread.SoftStop", i, () => { /* bar.SignalAndWait(); */ }).Execute();
