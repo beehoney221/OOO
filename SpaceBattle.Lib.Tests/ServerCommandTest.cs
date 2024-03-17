@@ -1,46 +1,24 @@
 ﻿using Hwdtech;
 using Hwdtech.Ioc;
+using Moq;
 
 namespace SpaceBattle.Lib.Tests;
 public class ServerCommandTest
 {
-    private Dictionary<int, TestServerThread>? _dict;
-    private ActionCommand? _actStop;
     public ServerCommandTest()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-        var dict = new Dictionary<int, TestServerThread>();
-
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "ServerThread.CreateAndStart",
+            "Thread.SendCommand",
             (object[] args) =>
             {
                 var id = (int)args[0];
-                var action = (Action)args[1];
+                var cmd = (ICommand)args[1];
 
-                var actStart = new ActionCommand(() => { dict.Add(id, new TestServerThread()); });
-
-                _dict = dict;
-
-                return actStart;
-            }
-        ).Execute();
-
-        IoC.Resolve<Hwdtech.ICommand>(
-            "IoC.Register",
-            "ServerThread.SoftStop",
-            (object[] args) =>
-            {
-                var id = (int)args[0];
-                var action = (Action)args[1];
-
-                var actStop = new ActionCommand(() => { dict[id].Stop(); });
-                _actStop = actStop;
-
-                return _actStop;
+                return cmd;
             }
         ).Execute();
 
@@ -53,9 +31,21 @@ public class ServerCommandTest
     {
         var num = 5;
 
+        var moqCmdStart = new Mock<ICommand>();
+        moqCmdStart.Setup(c => c.Execute()).Verifiable(); // квадратик + -
+
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Thread.CreateAndStart",
+            (object[] args) =>
+            {
+                return moqCmdStart.Object; // возвращаю не просто конструктор, который можно как-то менять, а именно объект айкмд, который может всякие сетапы делать
+            }
+        ).Execute();
+
         IoC.Resolve<ICommand>("Server.Start.Cmd", num).Execute();
 
-        Assert.Equal(num, _dict?.Count);
+        moqCmdStart.Verify(c => c.Execute(), Times.Exactly(num));
     }
 
     [Fact]
@@ -63,22 +53,35 @@ public class ServerCommandTest
     {
         var num = 5;
 
-        IoC.Resolve<ICommand>("Server.Start.Cmd", num).Execute();
+        var moqCmdStop = new Mock<ICommand>();
+        moqCmdStop.Setup(c => c.Execute()).Verifiable(); // квадратик + -
+        
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Thread.SoftStop",
+            (object[] args) =>
+            {
+                return moqCmdStop.Object;
+            }
+        ).Execute();
+
         IoC.Resolve<ICommand>("Server.Stop.Cmd", num).Execute();
 
-        Assert.True(_dict?.Values.All(thread => thread.Status() == true));
+        moqCmdStop.Verify(c => c.Execute(), Times.Exactly(num));
     }
-}
 
-public class TestServerThread
-{
-    private bool _stop = false;
-    public bool Status()
+    [Fact]
+    public void LogStrategySuccesful()
     {
-        return _stop;
-    }
-    public void Stop()
-    {
-        _stop = true;
+        var exc = new Exception("Threads' transmitted and expected ID and not coincides.");
+        var path = Path.GetTempFileName();
+        // var path = "E:/GitHub/OOO/SpaceBattle.Lib.Tests/text.txt";
+        new StrategyLog(path).Execute();
+
+        IoC.Resolve<ICommand>("Exception.Log", new Mock<ICommand>().Object, exc).Execute();
+
+        var sr = new StreamReader(path);
+        var str = sr.ReadLine()?.Split(" - ")[1];
+        Assert.Equal(exc.Message, str);
     }
 }
