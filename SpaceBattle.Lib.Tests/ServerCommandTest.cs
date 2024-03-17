@@ -55,7 +55,7 @@ public class ServerCommandTest
 
         var moqCmdStop = new Mock<ICommand>();
         moqCmdStop.Setup(c => c.Execute()).Verifiable(); // квадратик + -
-        
+
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Thread.SoftStop",

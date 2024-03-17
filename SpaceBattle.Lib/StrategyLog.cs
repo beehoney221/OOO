@@ -1,10 +1,10 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
 public class StrategyLog : ICommand
 {
-    private readonly string _path; 
+    private readonly string _path;
     public StrategyLog(string path)
     {
         _path = path;
@@ -25,7 +25,7 @@ public class StrategyLog : ICommand
                 sw.WriteLine($"{DateTime.Now} - {exc.Message}");
                 sw.Close();
             });
-            
+
             return result;
         }
         ).Execute();
