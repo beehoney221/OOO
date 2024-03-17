@@ -12,19 +12,17 @@ public class StopServerCommand : ICommand
         (object[] args) =>
         {
             var numThreads = (int)args[0];
-            // var bar = new Barrier(numThreads + 1);
-            var i = 0;
-
+            var bar = new Barrier(numThreads + 1);
+            
+            var threadsId = Enumerable.Range(0, numThreads).ToArray();
             var cmd = new ActionCommand(() =>
             {
-                while (i < numThreads)
-                {
-                    IoC.Resolve<ICommand>("ServerThread.SoftStop", i, () => { /* bar.SignalAndWait(); */ }).Execute();
-                    i++;
-                }
-                // bar.SignalAndWait();
+                Array.ForEach(threadsId, i => { 
+                        IoC.Resolve<ICommand>(
+                            "Thread.SendCommand", i,
+                            IoC.Resolve<ICommand>("Thread.SoftStop", i, () => { bar.SignalAndWait(); })).Execute();});
             });
-
+            
             return cmd;
         }
         ).Execute();

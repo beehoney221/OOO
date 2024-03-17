@@ -12,16 +12,12 @@ public class StartServerCommand : ICommand
         (object[] args) =>
         {
             var numThreads = (int)args[0];
-            var i = 0;
-
+            
+            var threadsId = Enumerable.Range(0, numThreads).ToArray();
             var cmd = new ActionCommand(() =>
             {
-                while (i < numThreads)
-                {
-                    IoC.Resolve<ICommand>("ServerThread.CreateAndStart", i, () => { /*bar.SignalAndWait();*/ }).Execute();
-                    i++;
-                }
-                // bar.SignalAndWait();
+                Array.ForEach(threadsId, i => { 
+                    IoC.Resolve<ICommand>("Thread.CreateAndStart", i, () => {}).Execute(); });
             });
 
             return cmd;
