@@ -32,14 +32,14 @@ public class ServerCommandTest
         var num = 5;
 
         var moqCmdStart = new Mock<ICommand>();
-        moqCmdStart.Setup(c => c.Execute()).Verifiable(); // квадратик + -
+        moqCmdStart.Setup(c => c.Execute()).Verifiable();
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Thread.CreateAndStart",
             (object[] args) =>
             {
-                return moqCmdStart.Object; // возвращаю не просто конструктор, который можно как-то менять, а именно объект айкмд, который может всякие сетапы делать
+                return moqCmdStart.Object;
             }
         ).Execute();
 
@@ -54,7 +54,7 @@ public class ServerCommandTest
         var num = 5;
 
         var moqCmdStop = new Mock<ICommand>();
-        moqCmdStop.Setup(c => c.Execute()).Verifiable(); // квадратик + -
+        moqCmdStop.Setup(c => c.Execute()).Verifiable();
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
@@ -75,7 +75,7 @@ public class ServerCommandTest
     {
         var exc = new Exception("Threads' transmitted and expected ID and not coincides.");
         var path = Path.GetTempFileName();
-        // var path = "E:/GitHub/OOO/SpaceBattle.Lib.Tests/text.txt";
+        
         new StrategyLog(path).Execute();
 
         IoC.Resolve<ICommand>("Exception.Log", new Mock<ICommand>().Object, exc).Execute();
