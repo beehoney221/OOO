@@ -82,6 +82,9 @@ public class ServerCommandTest
 
         var sr = new StreamReader(path);
         var str = sr.ReadLine()?.Split(" - ")[1];
+        sr.Close();
+        File.Delete(path);
+
         Assert.Equal(exc.Message, str);
     }
 }
