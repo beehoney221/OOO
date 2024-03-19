@@ -25,6 +25,8 @@ public class StopServerCommand : ICommand
                 });
             });
 
+            bar.Dispose();
+
             return cmd;
         }
         ).Execute();
