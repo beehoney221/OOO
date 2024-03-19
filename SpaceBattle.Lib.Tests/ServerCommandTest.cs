@@ -73,7 +73,7 @@ public class ServerCommandTest
     [Fact]
     public void LogStrategySuccesful()
     {
-        var exc = new Exception("Threads' transmitted and expected ID and not coincides.");
+        var exc = new Exception("Threads' transmitted and expected ID are not coincides.");
         var path = Path.GetTempFileName();
 
         new StrategyLog(path).Execute();
