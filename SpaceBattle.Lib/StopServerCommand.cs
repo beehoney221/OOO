@@ -15,6 +15,7 @@ public class StopServerCommand : ICommand
             var bar = new Barrier(numThreads + 1);
 
             var threadsId = Enumerable.Range(0, numThreads).ToArray();
+
             var cmd = new ActionCommand(() =>
             {
                 Array.ForEach(threadsId, i =>
@@ -23,9 +24,9 @@ public class StopServerCommand : ICommand
                         "Thread.SendCommand", i,
                         IoC.Resolve<ICommand>("Thread.SoftStop", i, () => { bar.SignalAndWait(); })).Execute();
                 });
+                bar.SignalAndWait();
+                bar.Dispose();
             });
-
-            // bar.Dispose();
 
             return cmd;
         }

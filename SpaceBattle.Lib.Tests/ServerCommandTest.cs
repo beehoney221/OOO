@@ -61,6 +61,11 @@ public class ServerCommandTest
             "Thread.SoftStop",
             (object[] args) =>
             {
+                var act = (Action)args[1];
+                var th = new Thread(() => act());
+
+                th.Start();
+
                 return moqCmdStop.Object;
             }
         ).Execute();
