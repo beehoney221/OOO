@@ -4,13 +4,12 @@ namespace SpaceBattle.Lib;
 
 public class ConsoleApp
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
         new RegistStartServerCommand().Execute();
         new RegistStopServerCommand().Execute();
 
-        Console.WriteLine("Введите количество потоков: ");
-        var num = Convert.ToInt32(Console.ReadLine());
+        var num = Convert.ToInt32(args[0]);
         Console.WriteLine("Процедура запуска сервера началась.");
         IoC.Resolve<ICommand>("Server.Start.Cmd", num).Execute();
         Console.WriteLine("Сервер успешно запущен.");
