@@ -1,10 +1,10 @@
 using Moq;
 
 using System.Collections.Concurrent;
-
 using Hwdtech;
 using Hwdtech.Ioc;
 
+namespace SpaceBattle.Lib.Tests;
 public class ServerThreadTest
 {
     public ServerThreadTest() {

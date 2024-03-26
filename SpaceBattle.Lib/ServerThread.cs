@@ -2,6 +2,7 @@ using Hwdtech;
 
 using System.Collections.Concurrent;
 
+namespace SpaceBattle.Lib;
 public class ServerThread {
     private readonly BlockingCollection<ICommand> _q;
     private Action _behaviour;
@@ -25,12 +26,17 @@ public class ServerThread {
         };
 
         _t = new Thread(()=> {
-            while(!_stop) {
+            while(!_stop) 
+            {
                 _behaviour();
             }
         });
     }
 
+    public BlockingCollection<ICommand> GetQueue()
+    {
+        return _q;
+    }
     public void Start() {
         _t.Start();
     }
@@ -42,30 +48,9 @@ public class ServerThread {
     internal void UpdateBehaviour(Action behaviour) {
         _behaviour = behaviour;
     }
-}
 
-public class HardStopCommand : ICommand
-{
-    private ServerThread _st;
-    public HardStopCommand(ServerThread st) {
-        _st = st;
-    }
-    public void Execute()
-    {
-        // IoC.Resolve<ICommand>(
-        // )
-        _st.Stop();
-    }
+    // public override bool Equals(object? obj)
+    // {
+    //     return base.Equals(obj);
+    // }
 }
-
-// public class SoftStop: ICommand
-// {
-//     private ServerThread _st;
-//     public SoftStop(ServerThread st){
-//         _st = st;
-//     }
-//     public void Execute()
-//     {
-        
-//     }
-// }
