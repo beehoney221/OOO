@@ -9,10 +9,11 @@ public class MacroCommandTests
     public MacroCommandTests()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
-        new MacroCommandBuild().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set",
             IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))
         ).Execute();
+
+        new MacroCommandBuild().Execute();
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.MacroCommands.MoveWithShoot", (object[] args) =>
         {
