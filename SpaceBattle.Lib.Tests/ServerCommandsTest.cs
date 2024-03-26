@@ -15,10 +15,11 @@ public class ServerCommandTest
             "Thread.SendCommand",
             (object[] args) =>
             {
-                var id = (int)args[0];
-                var cmd = (ICommand)args[1];
+                var cmd = new Mock<ICommand>();
+                var ss = (ICommand)args[1];
+                cmd.Setup(c => c.Execute()).Callback(() => ss.Execute());
 
-                return cmd;
+                return cmd.Object;
             }
         ).Execute();
 
