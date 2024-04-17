@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
@@ -14,7 +14,7 @@ public class MessageHandler : ICommand
         new RegistInterpretCommand().Execute();
 
         var commandInterpretation = IoC.Resolve<ICommand>("Command.Interpretation", _contract); // создание команды интерпретации сообщения
-        
+
         commandInterpretation.Execute(); // execute : интерпретация сообщения --> создание команды --> появление команды в очереди соответствующей игры
     }
 }
