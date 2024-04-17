@@ -4,28 +4,17 @@ namespace SpaceBattle.Lib;
 
 public class MessageHandler : ICommand
 {
-    private Queue<Contract>? _q;
-    public void PutQ(Contract contr)
+    private readonly Contract _contract;
+    public MessageHandler(Contract contract)
     {
-        var q = new Queue<Contract>();
-        q.Enqueue(contr);
-        _q = q;
+        _contract = contract;
     }
     public void Execute()
     {
-        var contract = _q.Peek();
-        // извлечь из очереди сообщение
-
         new RegistInterpretCommand().Execute();
 
-        var cmd = IoC.Resolve<ICommand>("InterpretCommand", contract); // создание команды интерпретации сообщения
+        var commandInterpretation = IoC.Resolve<ICommand>("Command.Interpretation", _contract); // создание команды интерпретации сообщения
         
-        cmd.Execute(); // execute : интерпретация сообщения --> создание команды --> появление команды в очереди соответствующей игры
+        commandInterpretation.Execute(); // execute : интерпретация сообщения --> создание команды --> появление команды в очереди соответствующей игры
     }
-}
-
-public class Contract
-{
-    public string? cmdType { get; set;}
-    public IDictionary<string, object>? parameters;
 }
