@@ -8,20 +8,19 @@ public class RegistInterpretCommand : ICommand
     {
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
-        "InterpretCommand",
+        "Command.Interpretation",
         (object[] args) =>
         {
             var contract = (Contract)args[0];
 
-            var cmd = new ActionCommand(() =>
+            var cmdGame = new ActionCommand(() =>
             {
-                IoC.Resolve<ICommand>("CreateCommand", contract);
-                IoC.Resolve<ICommand>($"Commands.{contract.cmdType}", contract); /// зачем это надо
+                var obj = IoC.Resolve<object>($"Game.Object.Get", contract.gameItemId);
+                var command = IoC.Resolve<ICommand>($"Game.Command.{contract.type}", obj, contract);
+                IoC.Resolve<ICommand>("Game.Command.Add", command).Execute();
             });
 
-            /// поместить в очередь соответствующей игры
-
-            return cmd;
+            return cmdGame;
         }
         ).Execute();
     }
