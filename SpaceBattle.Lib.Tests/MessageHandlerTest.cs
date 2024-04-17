@@ -5,50 +5,74 @@ using Moq;
 namespace SpaceBattle.Lib.Tests;
 public class MessageHandlerTest
 {
+    public Mock<ICommand> _cmdAdd = new();
     public MessageHandlerTest()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
+        var moqObj = new Mock<IUObject>();
+        
         IoC.Resolve<Hwdtech.ICommand>(
-            "IoC.Register",
-            "CreateCommand",
-            (object[] args) =>
-            {
-                var contract = (Contract)args[0];
-                var moqCmd = new Mock<ICommand>();
+        "IoC.Register",
+        "Game.Object.Get",
+        (object[] args) =>
+        {
+            var gameItemId = args[0];
+            moqObj.Object.SetProperty("ID", gameItemId);
 
-                IoC.Resolve<Hwdtech.ICommand>(
-                    "IoC.Register",
-                    $"Command.{contract.cmdType}",
-                    (object[] args) =>
-                    {
-                        var param = contract.parameters;
-
-                        return moqCmd.Object; //// как передать параметры моковой команде
-                    }
-                ).Execute();
-                
-                return moqCmd.Object;
-            }
+            return moqObj.Object;
+        }
         ).Execute();
+
+        IoC.Resolve<Hwdtech.ICommand>(
+        "IoC.Register",
+        "Game.Command.Add",
+        (object[] args) =>
+        {
+            var commandForQ = (ICommand)args[0];
+
+            _cmdAdd.Setup(c => c.Execute()).Callback(() => commandForQ.Execute()).Verifiable();
+
+            return _cmdAdd.Object;
+        }
+        ).Execute();
+
     }
 
     [Fact]
     public void HandlerSuccesful()
     {
-        var moqCmdStart = new Mock<ICommand>();
-        moqCmdStart.Setup(c => c.Execute()).Verifiable();
-        
-        var mh = new MessageHandler();
-        
-        var contract = new Contract();
-        contract.cmdType = "fire";
-        contract.parameters = new Dictionary<string, object>() { {"game id", "asdfg"}, {"game item id", 548}};
+        var contract = new Contract
+        {
+            type = "Rotate",
+            gameId = "asdfg",
+            gameItemId = 548,
+            parameters = new Dictionary<string, object>(){{"angle velocity", 50}}
+        };
 
-        mh.PutQ(contract);
+        var rotatable = new Mock<IRotatable>();
+        rotatable.SetupGet(x => x.Angle).Returns(new Angle(90));
+        
+        IoC.Resolve<Hwdtech.ICommand>(
+        "IoC.Register",
+        "Game.Command.Rotate",
+        (object[] args) =>
+        {
+            var obj = (IUObject)args[0];
+            var contract = (Contract)args[1];
+
+            rotatable.SetupGet(x => x.AngleVelocity).Returns(new Angle((int)contract.parameters!["angle velocity"]));
+
+            var cmdRotate = new RotateCommand(rotatable.Object);
+
+            return cmdRotate;
+        }
+        ).Execute();
+        
+        var mh = new MessageHandler(contract);
         mh.Execute();
 
-        moqCmdStart.Verify(c => c.Execute(), Times.Exactly(5));
+        _cmdAdd.Verify(c => c.Execute(), Times.Once());
     }
 }
