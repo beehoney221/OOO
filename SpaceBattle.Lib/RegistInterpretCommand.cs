@@ -6,6 +6,8 @@ public class RegistInterpretCommand : ICommand
 {
     public void Execute()
     {
+        new RegistObjectGet().Execute();
+
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
         "Command.Interpretation",
