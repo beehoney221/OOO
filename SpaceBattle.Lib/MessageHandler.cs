@@ -25,7 +25,7 @@ public class MessageHandler : ICommand
             }
             catch
             {
-                throw new Exception($"Game witn ID '{ _contract.gameId}' is not found.");
+                throw new Exception($"Game witn ID '{_contract.gameId}' is not found.");
             }
         });
 

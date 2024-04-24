@@ -39,7 +39,7 @@ public class MessageHandlerTest
             var gameId = (string)args[0];
             var commandForQ = (ICommand)args[1];
             var queue = IoC.Resolve<Queue<ICommand>>("Game.Queue.Get", gameId);
-            
+
             _cmdAdd.Setup(c => c.Execute()).Callback(() => commandForQ.Execute()).Verifiable();
 
             return _cmdAdd.Object;
@@ -48,7 +48,7 @@ public class MessageHandlerTest
 
         var rotatable = new Mock<IRotatable>();
         rotatable.SetupGet(x => x.Angle).Returns(new Angle(90));
-        
+
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
         "Game.Command.Rotate",
@@ -75,8 +75,8 @@ public class MessageHandlerTest
         var type = "Rotate";
         var gameId = "asdfg";
         var gameItemId = 548;
-        var parameters = new Dictionary<string, object>(){ { "angle velocity", 50 } };
-        
+        var parameters = new Dictionary<string, object>() { { "angle velocity", 50 } };
+
         var contract = new Mock<IContract>();
         contract.SetupGet(x => x.type).Returns(type);
         contract.SetupGet(x => x.gameId).Returns(gameId);
@@ -112,8 +112,8 @@ public class MessageHandlerTest
     {
         var type = "StartMovement";
         var gameItemId = 548;
-        var parameters = new Dictionary<string, object>(){ { "initial velocity", 2 } };
-        
+        var parameters = new Dictionary<string, object>() { { "initial velocity", 2 } };
+
         var contract = new Mock<IContract>();
         contract.SetupGet(x => x.type).Returns(type);
         contract.SetupGet(x => x.gameItemId).Returns(548);
@@ -134,8 +134,8 @@ public class MessageHandlerTest
         var type = "Rotate";
         var gameId = "qwert";
         var gameItemId = 548;
-        var parameters = new Dictionary<string, object>(){ { "angle velocity", 50 } };
-        
+        var parameters = new Dictionary<string, object>() { { "angle velocity", 50 } };
+
         var contract = new Mock<IContract>();
         contract.SetupGet(x => x.type).Returns(type);
         contract.SetupGet(x => x.gameId).Returns(gameId);

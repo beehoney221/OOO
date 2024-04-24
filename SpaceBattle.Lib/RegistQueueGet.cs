@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
@@ -13,7 +13,7 @@ public class RegistQueueGet : ICommand
         {
             var gameId = (string)args[0];
             var gameQueue = IoC.Resolve<Dictionary<string, Queue<ICommand>>>("Get.GameQueue");
-            
+
             return gameQueue[gameId];
         }
         ).Execute();
