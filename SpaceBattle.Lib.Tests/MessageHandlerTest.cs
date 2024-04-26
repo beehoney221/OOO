@@ -108,7 +108,7 @@ public class MessageHandlerTest
     }
 
     [Fact]
-    public void StrategyNotFound()
+    public void DependencyNotFound()
     {
         var type = "StartMovement";
         var gameItemId = 548;
