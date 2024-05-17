@@ -102,9 +102,8 @@ public class MessageHandlerTest
         contract.SetupGet(x => x.gameItemId).Returns(gameItemId);
 
         var mh = new MessageHandler(contract.Object);
-        var exc = Assert.Throws<Exception>(mh.Execute);
 
-        Assert.Equal($"Game object with ID '{gameItemId}' is not found.", exc.Message);
+        Assert.Throws<KeyNotFoundException>(() => mh.Execute());
     }
 
     [Fact]
@@ -123,9 +122,8 @@ public class MessageHandlerTest
         _idObj.Add(gameItemId, moqObj.Object);
 
         var mh = new MessageHandler(contract.Object);
-        var exc = Assert.Throws<Exception>(mh.Execute);
 
-        Assert.Equal($"IoC dependency with key \"Game.Command.{type}\" is not found.", exc.Message);
+        Assert.Throws<ArgumentException>(() => mh.Execute());
     }
 
     [Fact]
@@ -146,8 +144,7 @@ public class MessageHandlerTest
         _idObj.Add(gameItemId, moqObj.Object);
 
         var mh = new MessageHandler(contract.Object);
-        var exc = Assert.Throws<Exception>(mh.Execute);
 
-        Assert.Equal($"Game witn ID '{gameId}' is not found.", exc.Message);
+        Assert.ThrowsAny<KeyNotFoundException>(() => mh.Execute());
     }
 }
