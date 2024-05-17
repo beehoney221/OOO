@@ -13,15 +13,8 @@ public class RegistObjectGet : ICommand
         {
             var gameItemId = (int)args[0];
             var idObj = IoC.Resolve<Dictionary<int, IUObject>>("Get.IdObject");
-
-            try
-            {
-                return idObj[gameItemId];
-            }
-            catch
-            {
-                throw new Exception($"Game object with ID '{gameItemId}' is not found.");
-            }
+            
+            return idObj[gameItemId];
         }
         ).Execute();
     }
