@@ -13,7 +13,7 @@ public class RegistObjectGet : ICommand
         {
             var gameItemId = (int)args[0];
             var idObj = IoC.Resolve<Dictionary<int, IUObject>>("Get.IdObject");
-            
+
             return idObj[gameItemId];
         }
         ).Execute();
