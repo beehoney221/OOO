@@ -145,4 +145,25 @@ public class GameCommandStrategyTest
         var gameCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
         Assert.Throws<ArgumentException>(gameCreate);
     }
+
+    [Fact]
+    public void ParentScopeNotDefined()
+    {   
+        var gameId = "asdfg";
+        var quant = 5;
+
+        var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant);
+        
+        Assert.ThrowsAny<Exception>(scopeCreate);
+    }
+
+    [Fact]
+    public void QuantumNotDefined()
+    {   
+        var gameId = "asdfg";
+        var prntScope = IoC.Resolve<object>("Scopes.Current");
+
+        var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, prntScope);
+        Assert.ThrowsAny<Exception>(scopeCreate);
+    }
 }
