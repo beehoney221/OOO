@@ -166,4 +166,35 @@ public class GameCommandStrategyTest
         var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, prntScope);
         Assert.ThrowsAny<Exception>(scopeCreate);
     }
+
+    [Fact]
+    public void GameQueueNotFound()
+    {   
+        var gameId = "asdfg";
+        var quant = 5;
+        var prntScope = IoC.Resolve<object>("Scopes.Current");
+
+        IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
+        
+        _gameCommandsQueue.Remove(gameId);
+        var queuePut = () => IoC.Resolve<Queue<ICommand>>("Game.Queue.Put", gameId);
+        Assert.ThrowsAny<Exception>(queuePut);
+    }
+
+    [Fact]
+    public void GameQueueEmpty()
+    {   
+        var gameId = "asdfg";
+        var quant = 5;
+        var prntScope = IoC.Resolve<object>("Scopes.Current");
+
+        IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
+
+        var queuePull = () => IoC.Resolve<ICommand>("Game.Queue.Pull", gameId);
+        Assert.ThrowsAny<Exception>(queuePull);
+    }
 }
