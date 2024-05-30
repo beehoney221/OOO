@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
 
@@ -12,7 +12,7 @@ public class GameCommandStrategyTest
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
-        
+
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Get.GameQueue",
@@ -71,7 +71,7 @@ public class GameCommandStrategyTest
 
                 var gameCommand = new Queue<ICommand>();
                 _gameCommandsQueue.Add(gameId, gameCommand);
-                
+
                 var gameCommandScope = IoC.Resolve<object>("Game.Scope.New", args);
                 _gameScopes.Add(gameId, gameCommandScope);
 
@@ -86,10 +86,11 @@ public class GameCommandStrategyTest
             {
                 var gameId = (string)args[0];
 
-                var deleteGameCommand = new ActionCommand(() => {
+                var deleteGameCommand = new ActionCommand(() =>
+                {
                     _gameScopes.Remove(gameId);
                     _gameCommandsQueue.Remove(gameId);
-                    });
+                });
 
                 return deleteGameCommand;
             }
@@ -98,7 +99,7 @@ public class GameCommandStrategyTest
 
     [Fact]
     public void GameCommandStrategySuccesful()
-    {   
+    {
         var gameId = "asdfg";
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
@@ -106,7 +107,7 @@ public class GameCommandStrategyTest
 
         var IdObj = new Dictionary<int, IUObject>();
         var obj = new Mock<IUObject>();
-        
+
         IdObj.Add(gameItemId, obj.Object);
         _gameIdObject.Add("asdfg", IdObj);
 
@@ -120,10 +121,10 @@ public class GameCommandStrategyTest
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
 
         Assert.Equal(quant, int.Parse(IoC.Resolve<string>("Game.Quantum.Get")));
-        
+
         IoC.Resolve<ICommand>("Game.Queue.Put", cmd.Object).Execute();
         Assert.Equal(cmd.Object, IoC.Resolve<ICommand>("Game.Queue.Pull"));
-        
+
         Assert.Equal(obj.Object, IoC.Resolve<IUObject>("Game.Object.Get", gameItemId));
         IoC.Resolve<ICommand>("Game.Object.Delete", gameItemId).Execute();
         Assert.False(_gameIdObject[gameId].ContainsKey(gameItemId));
@@ -135,31 +136,31 @@ public class GameCommandStrategyTest
 
     [Fact]
     public void GameCommandWithTheSameIdHasAlreadyBeenAdded()
-    {   
+    {
         var gameId = "asdfg";
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
 
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
-        
+
         var gameCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
         Assert.Throws<ArgumentException>(gameCreate);
     }
 
     [Fact]
     public void ParentScopeNotDefined()
-    {   
+    {
         var gameId = "asdfg";
         var quant = 5;
 
         var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant);
-        
+
         Assert.ThrowsAny<Exception>(scopeCreate);
     }
 
     [Fact]
     public void QuantumNotDefined()
-    {   
+    {
         var gameId = "asdfg";
         var prntScope = IoC.Resolve<object>("Scopes.Current");
 
@@ -169,7 +170,7 @@ public class GameCommandStrategyTest
 
     [Fact]
     public void GameQueueNotFound()
-    {   
+    {
         var gameId = "asdfg";
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
@@ -177,7 +178,7 @@ public class GameCommandStrategyTest
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
-        
+
         _gameCommandsQueue.Remove(gameId);
         var queuePut = () => IoC.Resolve<Queue<ICommand>>("Game.Queue.Put", gameId);
         Assert.ThrowsAny<Exception>(queuePut);
@@ -185,7 +186,7 @@ public class GameCommandStrategyTest
 
     [Fact]
     public void GameQueueEmpty()
-    {   
+    {
         var gameId = "asdfg";
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
@@ -200,7 +201,7 @@ public class GameCommandStrategyTest
 
     [Fact]
     public void GameObjectWithThisIdNotFound()
-    {   
+    {
         var gameId = "asdfg";
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
@@ -213,7 +214,7 @@ public class GameCommandStrategyTest
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
-        
+
         var objGet = () => IoC.Resolve<IUObject>("Game.Object.Get", gameItemId);
         Assert.ThrowsAny<Exception>(objGet);
     }

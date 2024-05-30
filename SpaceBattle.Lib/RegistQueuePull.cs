@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
@@ -18,7 +18,7 @@ public class RegistQueuePull : ICommand
         {
             var gameQueue = IoC.Resolve<Queue<ICommand>>("Game.Queue.Get", _gameId);
             var cmd = gameQueue.Dequeue();
-            
+
             return cmd;
         }
         ).Execute();
