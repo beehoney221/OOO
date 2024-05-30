@@ -197,4 +197,24 @@ public class GameCommandStrategyTest
         var queuePull = () => IoC.Resolve<ICommand>("Game.Queue.Pull", gameId);
         Assert.ThrowsAny<Exception>(queuePull);
     }
+
+    [Fact]
+    public void GameObjectWithThisIdNotFound()
+    {   
+        var gameId = "asdfg";
+        var quant = 5;
+        var prntScope = IoC.Resolve<object>("Scopes.Current");
+        var gameItemId = 548;
+
+        var IdObj = new Dictionary<int, IUObject>();
+
+        _gameIdObject.Add("asdfg", IdObj);
+
+        IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
+        
+        var objGet = () => IoC.Resolve<IUObject>("Game.Object.Get", gameItemId);
+        Assert.ThrowsAny<Exception>(objGet);
+    }
 }
