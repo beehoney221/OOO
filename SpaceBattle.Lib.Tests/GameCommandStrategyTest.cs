@@ -132,4 +132,17 @@ public class GameCommandStrategyTest
         Assert.Empty(_gameCommandsQueue);
         Assert.Empty(_gameScopes);
     }
+
+    [Fact]
+    public void GameCommandWithTheSameIdHasAlreadyBeenAdded()
+    {   
+        var gameId = "asdfg";
+        var quant = 5;
+        var prntScope = IoC.Resolve<object>("Scopes.Current");
+
+        IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+        
+        var gameCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+        Assert.Throws<ArgumentException>(gameCreate);
+    }
 }
