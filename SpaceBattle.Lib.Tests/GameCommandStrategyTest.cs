@@ -95,4 +95,41 @@ public class GameCommandStrategyTest
             }
         ).Execute();
     }
+
+    [Fact]
+    public void GameCommandStrategySuccesful()
+    {   
+        var gameId = "asdfg";
+        var quant = 5;
+        var prntScope = IoC.Resolve<object>("Scopes.Current");
+        var gameItemId = 548;
+
+        var IdObj = new Dictionary<int, IUObject>();
+        var obj = new Mock<IUObject>();
+        
+        IdObj.Add(gameItemId, obj.Object);
+        _gameIdObject.Add("asdfg", IdObj);
+
+        var cmd = new Mock<ICommand>();
+
+        IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+
+        Assert.Single(_gameCommandsQueue);
+        Assert.Single(_gameScopes);
+
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
+
+        Assert.Equal(quant, int.Parse(IoC.Resolve<string>("Game.Quantum.Get")));
+        
+        IoC.Resolve<ICommand>("Game.Queue.Put", cmd.Object).Execute();
+        Assert.Equal(cmd.Object, IoC.Resolve<ICommand>("Game.Queue.Pull"));
+        
+        Assert.Equal(obj.Object, IoC.Resolve<IUObject>("Game.Object.Get", gameItemId));
+        IoC.Resolve<ICommand>("Game.Object.Delete", gameItemId).Execute();
+        Assert.False(_gameIdObject[gameId].ContainsKey(gameItemId));
+
+        IoC.Resolve<ICommand>("Game.Delete", gameId).Execute();
+        Assert.Empty(_gameCommandsQueue);
+        Assert.Empty(_gameScopes);
+    }
 }
