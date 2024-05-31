@@ -24,75 +24,19 @@ public class GameCommandStrategyTest
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "Game.Scope.Create",
+            "Get.GameIdObject",
             (object[] args) =>
             {
-                var gameId = (string)args[0];
-                var quant = (int)args[1];
-                var prntScope = args[2];
-
-                var gameScope = IoC.Resolve<object>("Scopes.New", prntScope);
-
-                IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", gameScope).Execute();
-
-                IoC.Resolve<Hwdtech.ICommand>(
-                "IoC.Register",
-                "Get.IdObject",
-                (object[] args) =>
-                {
-                    return _gameIdObject[gameId];
-                }
-                ).Execute();
-
-                new RegistQuantumGet(quant).Execute();
-
-                new RegistQueueGet().Execute();
-
-                new RegistQueuePut(gameId).Execute();
-
-                new RegistQueuePull(gameId).Execute();
-
-                new RegistObjectGet().Execute();
-
-                new RegistObjectDelete().Execute();
-
-                IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", prntScope).Execute();
-
-                return gameScope;
+                return _gameIdObject;
             }
         ).Execute();
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "Game.Create",
+            "Get.GameScopes",
             (object[] args) =>
             {
-                var gameId = (string)args[0];
-
-                var gameCommand = new Queue<ICommand>();
-                _gameCommandsQueue.Add(gameId, gameCommand);
-
-                var gameCommandScope = IoC.Resolve<object>("Game.Scope.Create", args);
-                _gameScopes.Add(gameId, gameCommandScope);
-
-                return gameCommand;
-            }
-        ).Execute();
-
-        IoC.Resolve<Hwdtech.ICommand>(
-            "IoC.Register",
-            "Game.Delete",
-            (object[] args) =>
-            {
-                var gameId = (string)args[0];
-
-                var deleteGameCommand = new ActionCommand(() =>
-                {
-                    _gameScopes.Remove(gameId);
-                    _gameCommandsQueue.Remove(gameId);
-                });
-
-                return deleteGameCommand;
+                return _gameScopes;
             }
         ).Execute();
     }
@@ -113,6 +57,8 @@ public class GameCommandStrategyTest
 
         var cmd = new Mock<ICommand>();
 
+        new RegistScopeCreate().Execute();
+        new RegistGameCreate().Execute();
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         Assert.Single(_gameCommandsQueue);
@@ -129,6 +75,7 @@ public class GameCommandStrategyTest
         IoC.Resolve<ICommand>("Game.Object.Delete", gameItemId).Execute();
         Assert.False(_gameIdObject[gameId].ContainsKey(gameItemId));
 
+        new RegistGameDelete().Execute();
         IoC.Resolve<ICommand>("Game.Delete", gameId).Execute();
         Assert.Empty(_gameCommandsQueue);
         Assert.Empty(_gameScopes);
@@ -141,6 +88,8 @@ public class GameCommandStrategyTest
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
 
+        new RegistScopeCreate().Execute();
+        new RegistGameCreate().Execute();
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         var gameCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
@@ -153,6 +102,8 @@ public class GameCommandStrategyTest
         var gameId = "asdfg";
         var quant = 5;
 
+        new RegistScopeCreate().Execute();
+        new RegistGameCreate().Execute();
         var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant);
 
         Assert.ThrowsAny<Exception>(scopeCreate);
@@ -164,24 +115,25 @@ public class GameCommandStrategyTest
         var gameId = "asdfg";
         var prntScope = IoC.Resolve<object>("Scopes.Current");
 
+        new RegistScopeCreate().Execute();
+        new RegistGameCreate().Execute();
         var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, prntScope);
         Assert.ThrowsAny<Exception>(scopeCreate);
     }
 
     [Fact]
-    public void GameQueueNotFound()
+    public void GameNotFound()
     {
         var gameId = "asdfg";
-        var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
 
-        IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
+        new RegistGameDelete().Execute();
 
-        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
-
-        _gameCommandsQueue.Remove(gameId);
         var queuePut = () => IoC.Resolve<Queue<ICommand>>("Game.Queue.Put", gameId);
+        var gameDelete = () => IoC.Resolve<Queue<ICommand>>("Game.Delete", gameId);
+
         Assert.ThrowsAny<Exception>(queuePut);
+        Assert.ThrowsAny<Exception>(gameDelete);
     }
 
     [Fact]
@@ -191,6 +143,8 @@ public class GameCommandStrategyTest
         var quant = 5;
         var prntScope = IoC.Resolve<object>("Scopes.Current");
 
+        new RegistScopeCreate().Execute();
+        new RegistGameCreate().Execute();
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
@@ -211,11 +165,15 @@ public class GameCommandStrategyTest
 
         _gameIdObject.Add("asdfg", IdObj);
 
+        new RegistScopeCreate().Execute();
+        new RegistGameCreate().Execute();
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
 
         var objGet = () => IoC.Resolve<IUObject>("Game.Object.Get", gameItemId);
+        var objDelete = () => IoC.Resolve<ICommand>("Game.Object.Delete", gameItemId);
         Assert.ThrowsAny<Exception>(objGet);
+        Assert.ThrowsAny<Exception>(objDelete);
     }
 }
