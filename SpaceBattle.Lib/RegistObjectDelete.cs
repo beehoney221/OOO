@@ -14,7 +14,14 @@ public class RegistObjectDelete : ICommand
             var gameItemId = (int)args[0];
             var idObject = IoC.Resolve<Dictionary<int, IUObject>>("Get.IdObject");
 
-            return new ActionCommand(() => idObject.Remove(gameItemId));
+            if (idObject.ContainsKey(gameItemId)) 
+            {
+                return new ActionCommand(() => idObject.Remove(gameItemId));
+            }
+            else 
+            { 
+                throw new Exception(); 
+            }
         }
         ).Execute();
     }
