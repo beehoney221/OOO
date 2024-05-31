@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
 
@@ -9,22 +9,22 @@ public class GameCommandTest
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
-        IoC.Resolve<Hwdtech.ICommand> ("IoC.Register", "ExceptionHandler.Handle",
-            (object[] args) => 
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ExceptionHandler.Handle",
+            (object[] args) =>
             {
-                
+
                 return 0;
             }
-        );  
-        
-        }
+        );
+
+    }
 
     [Fact]
     public void GameCommandSuccesful()
     {
         var moqCmd = new Mock<ICommand>();
         moqCmd.Setup(c => c.Execute()).Verifiable();
-        var scopes =  IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Current"));
+        var scopes = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Current"));
 
         var q = new Queue<ICommand>();
         q.Enqueue(moqCmd.Object);
@@ -34,7 +34,7 @@ public class GameCommandTest
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Game.TimeQuant",
-            (object[] args) => 
+            (object[] args) =>
             {
                 return (object)quant;
             }
@@ -51,7 +51,7 @@ public class GameCommandTest
     {
         var moqCmd = new Mock<ICommand>();
         moqCmd.Setup(c => c.Execute()).Throws(new Exception());
-        var scopes =  IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Current"));
+        var scopes = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Current"));
 
         var q = new Queue<ICommand>();
         q.Enqueue(moqCmd.Object);
@@ -61,7 +61,7 @@ public class GameCommandTest
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Game.TimeQuant",
-            (object[] args) => 
+            (object[] args) =>
             {
                 return (object)quant;
             }
