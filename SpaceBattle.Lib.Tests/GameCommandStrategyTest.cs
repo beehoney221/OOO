@@ -24,7 +24,7 @@ public class GameCommandStrategyTest
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "Game.Scope.New",
+            "Game.Scope.Create",
             (object[] args) =>
             {
                 var gameId = (string)args[0];
@@ -72,7 +72,7 @@ public class GameCommandStrategyTest
                 var gameCommand = new Queue<ICommand>();
                 _gameCommandsQueue.Add(gameId, gameCommand);
 
-                var gameCommandScope = IoC.Resolve<object>("Game.Scope.New", args);
+                var gameCommandScope = IoC.Resolve<object>("Game.Scope.Create", args);
                 _gameScopes.Add(gameId, gameCommandScope);
 
                 return gameCommand;
