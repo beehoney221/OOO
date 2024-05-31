@@ -10,13 +10,13 @@ public class GameCommand: ICommand {
         _scope = scope;
     }
     public void Execute() {
-        IoC.Resolve<ICommand>("Scopes.Current.Set", _scope).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _scope).Execute();
         var timeQuant = IoC.Resolve<long>("Game.TimeQuant");
         var sw = new Stopwatch();
         while (_q.Count > 0 && timeQuant >= 0) 
         {
             sw.Start();
-            var cmd = _q.Peek();
+            var cmd = _q.Dequeue();
             try 
             {
                 cmd.Execute();
