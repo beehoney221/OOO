@@ -59,6 +59,7 @@ public class GameCommandStrategyTest
 
         new RegistScopeCreate().Execute();
         new RegistGameCreate().Execute();
+
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         Assert.Single(_gameCommandsQueue);
@@ -76,6 +77,7 @@ public class GameCommandStrategyTest
         Assert.False(_gameIdObject[gameId].ContainsKey(gameItemId));
 
         new RegistGameDelete().Execute();
+
         IoC.Resolve<ICommand>("Game.Delete", gameId).Execute();
         Assert.Empty(_gameCommandsQueue);
         Assert.Empty(_gameScopes);
@@ -90,6 +92,7 @@ public class GameCommandStrategyTest
 
         new RegistScopeCreate().Execute();
         new RegistGameCreate().Execute();
+
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         var gameCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
@@ -104,6 +107,7 @@ public class GameCommandStrategyTest
 
         new RegistScopeCreate().Execute();
         new RegistGameCreate().Execute();
+
         var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant);
 
         Assert.ThrowsAny<Exception>(scopeCreate);
@@ -117,6 +121,7 @@ public class GameCommandStrategyTest
 
         new RegistScopeCreate().Execute();
         new RegistGameCreate().Execute();
+
         var scopeCreate = () => IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, prntScope);
         Assert.ThrowsAny<Exception>(scopeCreate);
     }
@@ -129,8 +134,8 @@ public class GameCommandStrategyTest
 
         new RegistGameDelete().Execute();
 
-        var queuePut = () => IoC.Resolve<Queue<ICommand>>("Game.Queue.Put", gameId);
-        var gameDelete = () => IoC.Resolve<Queue<ICommand>>("Game.Delete", gameId);
+        var queuePut = () => IoC.Resolve<ICommand>("Game.Queue.Put", gameId);
+        var gameDelete = () => IoC.Resolve<ICommand>("Game.Delete", gameId);
 
         Assert.ThrowsAny<Exception>(queuePut);
         Assert.ThrowsAny<Exception>(gameDelete);
@@ -145,6 +150,7 @@ public class GameCommandStrategyTest
 
         new RegistScopeCreate().Execute();
         new RegistGameCreate().Execute();
+
         IoC.Resolve<Queue<ICommand>>("Game.Create", gameId, quant, prntScope);
 
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _gameScopes[gameId]).Execute();
