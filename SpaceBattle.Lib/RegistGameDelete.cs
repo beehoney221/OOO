@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
@@ -15,8 +15,8 @@ public class RegistGameDelete : ICommand
 
                 var gameScopes = IoC.Resolve<Dictionary<string, object>>("Get.GameScopes");
                 var gameCommandsQueue = IoC.Resolve<Dictionary<string, Queue<ICommand>>>("Get.GameQueue");
-                
-                if (gameScopes.ContainsKey(gameId) & gameCommandsQueue.ContainsKey(gameId)) 
+
+                if (gameScopes.ContainsKey(gameId) & gameCommandsQueue.ContainsKey(gameId))
                 {
                     var deleteGameCommand = new ActionCommand(() =>
                     {
@@ -26,9 +26,9 @@ public class RegistGameDelete : ICommand
 
                     return deleteGameCommand;
                 }
-                else 
-                { 
-                    throw new Exception(); 
+                else
+                {
+                    throw new Exception();
                 }
             }
         ).Execute();

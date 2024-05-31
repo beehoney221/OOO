@@ -14,13 +14,13 @@ public class RegistObjectDelete : ICommand
             var gameItemId = (int)args[0];
             var idObject = IoC.Resolve<Dictionary<int, IUObject>>("Get.IdObject");
 
-            if (idObject.ContainsKey(gameItemId)) 
+            if (idObject.ContainsKey(gameItemId))
             {
                 return new ActionCommand(() => idObject.Remove(gameItemId));
             }
-            else 
-            { 
-                throw new Exception(); 
+            else
+            {
+                throw new Exception();
             }
         }
         ).Execute();
