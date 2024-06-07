@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
 
@@ -199,7 +199,7 @@ public class InitCommandTest
 
         var endable = new Mock<IMoveCommandEndable>();
         endable.Setup(x => x.Object).Returns(moqObj.Object);
-        
+
         IoC.Resolve<Hwdtech.ICommand>(
         "IoC.Register",
         "Command.EndMove",

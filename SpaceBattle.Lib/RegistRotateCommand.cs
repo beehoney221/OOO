@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
@@ -13,9 +13,9 @@ public class RegistRotateCommand : ICommand
             {
                 var obj = args[0];
                 var parameters = (IDictionary<string, object>)args[1];
-                
+
                 var cmd = IoC.Resolve<ICommand>("Command.Rotate", obj, parameters);
-                
+
                 return cmd;
             }
         ).Execute();
