@@ -2,28 +2,22 @@
 
 namespace SpaceBattle.Lib;
 
-public class RegistStartServerCommand : ICommand
+public class RegistStartMoveCommand : ICommand
 {
     public void Execute()
     {
         IoC.Resolve<Hwdtech.ICommand>(
-        "IoC.Register",
-        "Server.Start.Cmd",
-        (object[] args) =>
-        {
-            var numThreads = (int)args[0];
-
-            var threadsId = Enumerable.Range(0, numThreads).ToArray();
-            var cmd = new ActionCommand(() =>
+            "IoC.Register",
+            "Game.Command.StartMove",
+            (object[] args) =>
             {
-                Array.ForEach(threadsId, i =>
-                {
-                    IoC.Resolve<ICommand>("Thread.CreateAndStart", i, () => { }).Execute();
-                });
-            });
-
-            return cmd;
-        }
+                var obj = args[0];
+                var parameters = (IDictionary<string, object>)args[1];
+                
+                var cmd = IoC.Resolve<ICommand>("Command.StartMove", obj, parameters);
+                
+                return cmd;
+            }
         ).Execute();
     }
 }
