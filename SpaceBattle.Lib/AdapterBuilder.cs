@@ -1,43 +1,50 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Scriban;
 
 public class AdapterBuilder
 {
-    private readonly Type _targetType;
-    private readonly Type _newTargetType;
+    private readonly Template _templateCode;
 
-    public AdapterBuilder(Type targetType, Type newTargetType)
+    public AdapterBuilder()
     {
-        _targetType = targetType;
-        _newTargetType = newTargetType;
+        _templateCode = Template.Parse(@"public class {{new_target_type}}Adapter : {{new_target_type}}
+{
+    readonly private {{target_type}} _obj;
+    public {{new_target_type}}Adapter({{target_type}} obj) => _obj = obj;
+{{for property in properties}}
+    public {{property.property_type.name}} {{property.name}}
+    {
+{{if property.can_read}}
+        get => IoC.Resolve<{{property.property_type.name}}>(""Game.Get.Property"", ""{{property.name}}"", _obj);
+{{end}}
+{{if property.can_write}}
+        set => IoC.Resolve<ICommand>(""Game.Set.Property"", ""{{property.name}}"", _obj, value).Execute();
+{{end}}
+    }
+{{end}}
+}");
     }
 
-    public string Build()
+    public void Builder()
     {
-        var templateCode = IoC.Resolve<string>("Template");
 
-        var template = Template.Parse(templateCode);
-
-        var properties = _newTargetType.GetProperties()
-            .Select(property => new
-            {
-                name = property.Name,
-                property_type = new
+        IoC.Resolve<Hwdtech.ICommand>(
+                "IoC.Register",
+                "Game.Adapter.Build",
+                (object[] args) =>
                 {
-                    name = property.PropertyType.Name
-                },
-                can_read = property.CanRead,
-                can_write = property.CanWrite
-            })
-            .ToList();
+                    var newTargetType = (Type)args[0];
+                    var targetType = (Type)args[1];
+                    var properties = newTargetType.GetProperties();
+                    var result = _templateCode.Render(new
+                    {
+                        new_target_type = newTargetType.Name,
+                        target_type = targetType.Name,
+                        properties = properties
 
-        var result = template.Render(new
-        {
-            new_target_type = _newTargetType.Name,
-            target_type = _targetType.Name,
-            properties = properties
-        });
-
-        return result;
+                    });
+                    return result;
+                }
+            ).Execute();
     }
 }
