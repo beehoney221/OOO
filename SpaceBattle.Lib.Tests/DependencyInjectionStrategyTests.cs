@@ -14,8 +14,9 @@ namespace SpaceBattle.Lib.Tests
         }
         public class TestTypeMultipleConstructors
         {
+            public ITestDependency Dep { get; }
             public TestTypeMultipleConstructors() { }
-            public TestTypeMultipleConstructors(ITestDependency dep) { }
+            public TestTypeMultipleConstructors(ITestDependency dep) => Dep = dep;
         }
 
         public DependencyInjectionStrategyTests()
