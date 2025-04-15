@@ -16,7 +16,7 @@ namespace SpaceBattle.Lib
             var constructor = _type.GetConstructors().Single();
             var parameters = constructor.GetParameters();
 
-            IoC.Resolve<ICommand>(
+            IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
                 _type.ToString(),
                 (object[] args) =>
