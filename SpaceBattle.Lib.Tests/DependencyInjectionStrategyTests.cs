@@ -14,7 +14,7 @@ namespace SpaceBattle.Lib.Tests
         }
         public class TestTypeMultipleConstructors
         {
-            public ITestDependency Dep { get; }
+            public ITestDependency? Dep { get; }
             public TestTypeMultipleConstructors() { }
             public TestTypeMultipleConstructors(ITestDependency dep) => Dep = dep;
         }
@@ -31,7 +31,7 @@ namespace SpaceBattle.Lib.Tests
         [Fact]
         public void DependencyInjectionStrategyThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new DependencyInjectionStrategy(null));
+            Assert.Throws<ArgumentNullException>(() => new DependencyInjectionStrategy(null!));
         }
 
         [Fact]
