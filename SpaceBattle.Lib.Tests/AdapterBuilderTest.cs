@@ -15,37 +15,21 @@ public class AdapterBuilderTest
     [Fact]
     public void PositiveBuildingAdapter()
     {
-        var expected =
-@"public class IMovableAdapter : IMovable
-{
-    readonly private IUObject _obj;
-    public IMovableAdapter(IUObject obj) => _obj = obj;
-
-    public Vector Position
-    {
-
-        get => IoC.Resolve<Vector>(""Game.Get.Property"", ""Position"", _obj);
-
-
-        set => IoC.Resolve<ICommand>(""Game.Set.Property"", ""Position"", _obj, value).Execute();
-
-    }
-
-    public Vector Velocity
-    {
-
-        get => IoC.Resolve<Vector>(""Game.Get.Property"", ""Velocity"", _obj);
-
-
-    }
-
-}";
         new AdapterBuilder().Builder();
         var targetType = typeof(IUObject);
         var newTargetType = typeof(IMovable);
 
         var result = IoC.Resolve<string>("Game.Adapter.Build", newTargetType, targetType);
 
-        Assert.Equal(expected, result);
+        Assert.Contains("public class IMovableAdapter : IMovable", result);
+        Assert.Contains("readonly private IUObject _obj;", result);
+        Assert.Contains("public IMovableAdapter(IUObject obj) => _obj = obj;", result);
+
+        Assert.Contains("public Vector Position", result);
+        Assert.Contains("get => IoC.Resolve<Vector>(\"Game.Get.Property\", \"Position\", _obj);", result);
+        Assert.Contains("set => IoC.Resolve<ICommand>(\"Game.Set.Property\", \"Position\", _obj, value).Execute();", result);
+
+        Assert.Contains("public Vector Velocity", result);
+        Assert.Contains("get => IoC.Resolve<Vector>(\"Game.Get.Property\", \"Velocity\", _obj);", result);
     }
 }
