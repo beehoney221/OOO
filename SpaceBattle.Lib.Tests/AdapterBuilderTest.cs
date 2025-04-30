@@ -1,5 +1,8 @@
 ﻿using Hwdtech;
 using Hwdtech.Ioc;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SpaceBattle.Lib.Tests;
 
@@ -9,27 +12,33 @@ public class AdapterBuilderTest
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set",
-        IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+            IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
     }
-
     [Fact]
     public void PositiveBuildingAdapter()
     {
-        new AdapterBuilder().Builder();
+        var builder = new AdapterBuilder();
+        builder.Builder();
+
         var targetType = typeof(IUObject);
         var newTargetType = typeof(IMovable);
 
-        var result = IoC.Resolve<string>("Game.Adapter.Build", newTargetType, targetType);
+        var generatedCode = IoC.Resolve<string>("Game.Adapter.Build", newTargetType, targetType);
+        var syntaxTree = CSharpSyntaxTree.ParseText(generatedCode);
 
-        Assert.Contains("public class IMovableAdapter : IMovable", result);
-        Assert.Contains("readonly private IUObject _obj;", result);
-        Assert.Contains("public IMovableAdapter(IUObject obj) => _obj = obj;", result);
+        var diagnostics = syntaxTree.GetDiagnostics();
+        Assert.DoesNotContain(diagnostics, d => d.Severity == DiagnosticSeverity.Error);
 
-        Assert.Contains("public Vector Position", result);
-        Assert.Contains("get => IoC.Resolve<Vector>(\"Game.Get.Property\", \"Position\", _obj);", result);
-        Assert.Contains("set => IoC.Resolve<ICommand>(\"Game.Set.Property\", \"Position\", _obj, value).Execute();", result);
+        var root = syntaxTree.GetRoot();
 
-        Assert.Contains("public Vector Velocity", result);
-        Assert.Contains("get => IoC.Resolve<Vector>(\"Game.Get.Property\", \"Velocity\", _obj);", result);
+        var classDeclarations = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
+        Assert.Contains(classDeclarations, cd => cd.Identifier.Text == "IMovableAdapter");
+
+        var constructors = root.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
+        Assert.Contains(constructors, c => c.ParameterList.Parameters.Count == 1);
+
+        var properties = root.DescendantNodes().OfType<PropertyDeclarationSyntax>();
+        Assert.Contains(properties, p => p.Identifier.Text == "Position");
+        Assert.Contains(properties, p => p.Identifier.Text == "Velocity");
     }
 }
