@@ -16,8 +16,8 @@ public class CreateTorpedoCommand : ICommand
     {
         var torpedo = new Torpedo(_position, _velocity);
 
-        var cmdStartMove =  IoC.Resolve<SpaceBattle.Lib.ICommand>("Game.StartMoveCommand", torpedo);
-        
+        var cmdStartMove = IoC.Resolve<SpaceBattle.Lib.ICommand>("Game.StartMoveCommand", torpedo);
+
         cmdStartMove.Execute();
     }
 }
