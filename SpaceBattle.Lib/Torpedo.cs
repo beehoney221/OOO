@@ -1,6 +1,4 @@
-﻿using SpaceBattle.Lib;
-
-namespace SpaceBattle;
+﻿namespace SpaceBattle.Lib;
 public class Torpedo : IMovable
 {
     public Vector Position { get; set; }

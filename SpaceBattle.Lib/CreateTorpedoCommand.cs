@@ -1,14 +1,13 @@
 ﻿using Hwdtech;
-using SpaceBattle.Lib;
 
-namespace SpaceBattle;
+namespace SpaceBattle.Lib;
 public class CreateTorpedoCommand : ICommand
 {
     private readonly IMovable _ship;
-    private readonly IVector _position;
-    private readonly IVector _velocity;
+    private readonly Vector _position;
+    private readonly Vector _velocity;
 
-    public CreateTorpedoCommand(IMovable ship, IVector position, IVector velocity)
+    public CreateTorpedoCommand(IMovable ship, Vector position, Vector velocity)
     {
         _ship = ship;
         _position = position;
@@ -19,9 +18,8 @@ public class CreateTorpedoCommand : ICommand
     {
         var torpedo = new Torpedo(_position, _velocity);
 
-        IoC.Resolve<ICommand>("Game.RegisterObject", torpedo).Execute();
-
-        var moveCommand = new MoveCommand(torpedo);
-        IoC.Resolve<ICommand>("Game.AddCommand", moveCommand).Execute();
+        var cmdStartMove =  IoC.Resolve<SpaceBattle.Lib.ICommand>("Game.StartMoveCommand", torpedo);
+        
+        cmdStartMove.Execute();
     }
 }
