@@ -17,7 +17,7 @@ namespace SpaceBattle.Lib
             var position = _ship.Position;
             var velocity = _ship.Velocity;
 
-            var createTorpedoCommand = new CreateTorpedoCommand(_ship, position, velocity);
+            var createTorpedoCommand = new CreateTorpedoCommand(position, velocity);
 
             createTorpedoCommand.Execute();
         }
