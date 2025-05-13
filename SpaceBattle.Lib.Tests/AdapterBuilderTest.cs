@@ -86,7 +86,7 @@ public class AdapterBuilderTest
         var adapterCode = IoC.Resolve<string>("Game.Adapter.Build", typeof(IMovable), typeof(IUObject));
         var assembly = CompileAdapter(adapterCode);
         var adapterType = assembly.GetTypes().First(t => t.Name == "IMovableAdapter");
-        var adapter = Activator.CreateInstance(adapterType, new Mock<IUObject>().Object) as IMovable 
+        var adapter = Activator.CreateInstance(adapterType, new Mock<IUObject>().Object) as IMovable
             ?? throw new InvalidOperationException("Failed to create adapter");
 
         var moveCommand = new MoveCommand(adapter);
@@ -96,7 +96,6 @@ public class AdapterBuilderTest
         Assert.Equal(expectedNewPosition, actualNewPosition);
     }
 
-
     private static Assembly CompileAdapter(string code)
     {
         var systemRuntime = typeof(object).Assembly.Location;
@@ -105,7 +104,7 @@ public class AdapterBuilderTest
         var vectorAssembly = typeof(Vector).Assembly.Location;
         var hwdtechAssembly = typeof(Hwdtech.IoC).Assembly.Location;
         var movableAssembly = typeof(IMovable).Assembly.Location;
-        
+
         var references = new[]
         {
         MetadataReference.CreateFromFile(systemRuntime),
