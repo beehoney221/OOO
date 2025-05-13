@@ -1,6 +1,4 @@
-﻿using Hwdtech;
-
-namespace SpaceBattle.Lib
+﻿namespace SpaceBattle.Lib
 {
 
     public class ShootCommand : ICommand
