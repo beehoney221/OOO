@@ -1,9 +1,9 @@
-using Hwdtech;
+﻿using Hwdtech;
 namespace SpaceBattle.Lib;
 
 public class CreatTorpedo
 {
-    public void Create(IShootable shoot)
+    public static void Create(IShootable shoot)
     {
         var torpedoPosition = shoot.torpedoPosition;
         var torpedoVelocity = shoot.torpedoVelocity;

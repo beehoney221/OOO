@@ -1,7 +1,6 @@
-﻿using Moq;
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
-using SpaceBattle.Lib;
+using Moq;
 
 namespace SpaceBattle.Lib.Tests
 {
@@ -13,7 +12,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set",
                 IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
         }
-         
+
         [Fact]
         public void ShootCommand_Positive()
         {
@@ -33,7 +32,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
                 "Game.Set.Property",
-                (object[] args) => 
+                (object[] args) =>
                 {
                     var obj = (IUObject)args[0];
                     var prop = (string)args[1];
@@ -48,7 +47,7 @@ namespace SpaceBattle.Lib.Tests
                 (object[] args) => mockTorpedo.Object
             ).Execute();
 
-            new CreatTorpedo().Create(new Mock<IShootable>().Object);
+            CreatTorpedo.Create(new Mock<IShootable>().Object);
 
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
@@ -81,7 +80,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
                 "Game.Set.Property",
-                (object[] args) => 
+                (object[] args) =>
                 {
                     var obj = (IUObject)args[0];
                     var prop = (string)args[1];
