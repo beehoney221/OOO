@@ -8,7 +8,7 @@ public class CreatTorpedo
         var torpedoPosition = shoot.torpedoPosition;
         var torpedoVelocity = shoot.torpedoVelocity;
 
-        IoC.Resolve<ICommand>(
+        IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Game.Create.Torpedo",
             (object[] args) =>
