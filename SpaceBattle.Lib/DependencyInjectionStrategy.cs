@@ -22,7 +22,7 @@ namespace SpaceBattle.Lib
                 (object[] args) =>
                 {
                     var resolvedArgs = parameters
-                        .Select(p => IoC.Resolve<object>(p.ParameterType.ToString()))
+                        .Select(p => IoC.Resolve<object>(p.Name/*ParameterType.ToString()*/))
                         .ToArray();
 
                     return constructor.Invoke(resolvedArgs);

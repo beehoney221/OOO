@@ -6,7 +6,9 @@ namespace SpaceBattle.Lib.Tests
 {
     public class DependencyInjectionStrategyTests
     {
-        public interface ITestDependency { }
+        public interface ITestDependency { 
+            public void SomeMethod();
+        }
         public class TestTypeSingleConstructor
         {
             public ITestDependency Dep { get; }
@@ -62,7 +64,32 @@ namespace SpaceBattle.Lib.Tests
 
             Assert.IsType<TestTypeSingleConstructor>(instance);
             var typedInstance = (TestTypeSingleConstructor)instance;
-            Assert.Equal(mockDependency, typedInstance.Dep);
+            Assert.Equal(mockDependency, instance.Dep);
+        }
+        [Fact]
+        public void DependencyTestsSuccesful()
+        {
+            var type = typeof(TestTypeSingleConstructor);
+            var strategy = new DependencyInjectionStrategy(type);
+
+            var mockDependency = new Mock<ITestDependency>();
+            mockDependency.Setup(m => m.SomeMethod());
+
+            IoC.Resolve<Hwdtech.ICommand>(
+                "IoC.Register",
+                typeof(ITestDependency).ToString(),
+                (object[] args) => mockDependency.Object
+            ).Execute();
+
+            strategy.Execute();
+            var instance = IoC.Resolve<TestTypeSingleConstructor>(type.ToString());
+
+            instance.Dep.SomeMethod();
+
+            Assert.IsType<TestTypeSingleConstructor>(instance);
+            Assert.Equal(mockDependency.Object, instance.Dep);
+            
+            mockDependency.Verify(m => m.SomeMethod(), Times.AtLeastOnce());
         }
     }
 }
